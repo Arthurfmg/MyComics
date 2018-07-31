@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+android:layout_width="match_parent" android:layout_height="match_parent">
+    <ImageView
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:id="@+id/character_icon"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:src="@drawable/default_hero" />
+    <TextView
+        android:id="@+id/character_id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/character_icon"
+        android:text="1324"
+        android:textAppearance="?android:attr/textAppearanceListItemSmall" />
+        <!--
+         android:paddingLeft="10dp"
+        android:paddingRight="6dp"
+        android:layout_alignBaseline="@+id/ivUserIcon"
+        android:layout_toRightOf="@+id/ivUserIcon"-->
+
+<!--
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/tvName"
+        android:layout_toRightOf="@+id/tvName"
+        android:paddingRight="6dp"
+        android:text="from " />-->
+
+    <TextView
+        android:id="@+id/character_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/character_icon"
+        android:layout_below="@id/character_id"
+        android:text="Deadpool"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+       <!--android:layout_toRightOf="@+id/textView2"-->
+
+
+
+</RelativeLayout>
