@@ -9,6 +9,7 @@ public class VolumeModel extends ComicVineModel {
     private String count_of_issues;
     private Integer number;
     private String start_year;
+    private Publisher publisher;
 
     public Integer getNumber() {
         return number;
@@ -40,5 +41,13 @@ public class VolumeModel extends ComicVineModel {
 
     public void setStart_year(String start_year) {
         this.start_year = start_year;
+    }
+
+    public Publisher getPublisher() {
+        return publisher;
+    }
+
+    public void setPublisher(Publisher publisher) {
+        this.publisher = publisher;
     }
 }

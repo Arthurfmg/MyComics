@@ -1,68 +1,96 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/idCardView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="6dp"
     app:cardElevation="6dp">
 
-    <RelativeLayout
-        android:layout_width="wrap_content"
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <ImageView
             android:id="@+id/idImagemVolume"
-            android:layout_width="100dp"
-            android:layout_height="200dp"
+            android:layout_width="110dp"
+            android:layout_height="160dp"
             android:layout_margin="8dp"
-            android:scaleType="centerCrop"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/default_hero" />
 
         <TextView
             android:id="@+id/idNomeRevista"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_alignTop="@+id/idImagemVolume"
-            android:layout_marginLeft="-8dp"
-            android:layout_marginStart="-8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginStart="8dp"
             android:layout_toEndOf="@+id/idImagemVolume"
             android:layout_toRightOf="@+id/idImagemVolume"
             android:paddingRight="5dp"
             android:text="Revista"
             android:textSize="18sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@+id/imageView"
+            app:layout_constraintStart_toEndOf="@+id/idImagemVolume"
+            app:layout_constraintTop_toTopOf="@+id/idImagemVolume" />
 
         <TextView
             android:id="@+id/idAno"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_alignLeft="@+id/idNomeRevista"
             android:layout_alignStart="@+id/idNomeRevista"
             android:layout_below="@+id/idNomeRevista"
-            android:text="ano" />
+            android:layout_marginLeft="8dp"
+            android:layout_marginStart="8dp"
+            android:text="ano"
+            app:layout_constraintStart_toEndOf="@+id/idImagemVolume"
+            app:layout_constraintTop_toBottomOf="@+id/idNomeRevista" />
 
         <android.support.v7.widget.AppCompatImageView
             android:id="@+id/imageView"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:layout_marginEnd="12dp"
-            android:layout_marginRight="12dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/ic_star_border_black_24dp" />
 
         <TextView
             android:id="@+id/idEdicoes"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_below="@+id/idNomeRevista"
-            android:layout_marginEnd="117dp"
-            android:text="edicoes" />
+            android:layout_marginLeft="8dp"
+            android:layout_marginStart="8dp"
+            android:text="edicoes"
+            app:layout_constraintEnd_toStartOf="@+id/imageView"
+            app:layout_constraintStart_toEndOf="@+id/idAno"
+            app:layout_constraintTop_toBottomOf="@+id/idNomeRevista" />
+
+        <TextView
+            android:id="@+id/idEditora"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginStart="8dp"
+            android:text="publisher"
+            app:layout_constraintEnd_toStartOf="@+id/imageView"
+            app:layout_constraintStart_toEndOf="@+id/idImagemVolume"
+            app:layout_constraintTop_toBottomOf="@+id/idAno" />
 
 
-    </RelativeLayout>
+    </android.support.constraint.ConstraintLayout>
 
 </android.support.v7.widget.CardView>

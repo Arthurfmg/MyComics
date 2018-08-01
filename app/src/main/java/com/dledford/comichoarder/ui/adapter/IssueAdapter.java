@@ -37,13 +37,27 @@ public class IssueAdapter extends RecyclerView.Adapter<IssueAdapter.MyViewHolder
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         ComicVineIssueModel issueModel = issue.get(position);
 
-        holder.titulo.setText(issueModel.getName());
+        //verifica se existe um título, se não houver ele informa que não há titulo
+        if(issueModel.getName() != null){
+            holder.titulo.setText(issueModel.getName());
+        }else {
+            holder.titulo.setText("No Title");
+        }
+
         Picasso.with(context)
                 .load(issue.get(position).getImage().getThumb_url())
                 //.placeholder(R.drawable.default_hero)
                 .error(R.drawable.default_hero)
                 .into(holder.capa);
-        holder.ano.setText(issueModel.getStore_date());
+
+        //verifica se o ano de lançamento é nulo, se for ele mostra o ano que está na capa da revista
+        if(issueModel.getStore_date() != null){
+            holder.ano.setText(issueModel.getStore_date());
+        }else{
+            holder.ano.setText(issueModel.getCover_date());
+        }
+
+        holder.edicao.setText("Issue #" + issueModel.getIssue_number());
     }
 
     @Override
@@ -64,6 +78,7 @@ public class IssueAdapter extends RecyclerView.Adapter<IssueAdapter.MyViewHolder
             ano = itemView.findViewById(R.id.idAnoEdicao);
             titulo = itemView.findViewById(R.id.idTitulo);
             capa = itemView.findViewById(R.id.idImagemEdicao);
+            edicao = itemView.findViewById(R.id.idEdicao);
         }
     }
 }

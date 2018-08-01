@@ -50,6 +50,7 @@ public class VolumeAdapter extends RecyclerView.Adapter<VolumeAdapter.MyViewHold
                 .into(holder.imageView);
         holder.ano.setText(volumeModel.getStart_year());
         holder.edicoes.setText(volumeModel.getCount_of_issues());
+        holder.editora.setText(volumeModel.getPublisher().getName());
     }
 
     @Override
@@ -62,6 +63,7 @@ public class VolumeAdapter extends RecyclerView.Adapter<VolumeAdapter.MyViewHold
         private ImageView imageView;
         private TextView ano;
         private TextView edicoes;
+        private TextView editora;
 
         public MyViewHolder(View itemView) {
             super(itemView);
@@ -69,6 +71,7 @@ public class VolumeAdapter extends RecyclerView.Adapter<VolumeAdapter.MyViewHold
             imageView = itemView.findViewById(R.id.idImagemVolume);
             ano = itemView.findViewById(R.id.idAno);
             edicoes = itemView.findViewById(R.id.idEdicoes);
+            editora = itemView.findViewById(R.id.idEditora);
         }
     }
 }

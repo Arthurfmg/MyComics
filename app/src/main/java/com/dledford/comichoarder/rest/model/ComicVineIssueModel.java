@@ -9,6 +9,7 @@ public class ComicVineIssueModel extends ComicVineModel {
     private ComicVineModel volume;
     private Integer issue_number;
     private String store_date;
+    private String cover_date;
     private ComicVineImageModel image;
     private String description;
 
@@ -50,5 +51,13 @@ public class ComicVineIssueModel extends ComicVineModel {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getCover_date() {
+        return cover_date;
+    }
+
+    public void setCover_date(String cover_date) {
+        this.cover_date = cover_date;
     }
 }
