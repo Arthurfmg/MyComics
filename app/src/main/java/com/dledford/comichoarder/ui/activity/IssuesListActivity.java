@@ -56,25 +56,6 @@ public class IssuesListActivity extends AppCompatActivity {
                 //edicao = new VolumeService().sortBestMatch(textoDefinitivo, volume);
                 IssueAdapter adapter = new IssueAdapter(edicao, IssuesListActivity.this);
                 recyclerEdicao.setAdapter(adapter);
-
-                recyclerEdicao.addOnItemTouchListener(
-                        new RecyclerItemClickListener(getApplicationContext(), recyclerEdicao, new RecyclerItemClickListener.OnItemClickListener() {
-                            @Override
-                            public void onItemClick(View view, int position) {
-
-                            }
-
-                            @Override
-                            public void onLongItemClick(View view, int position) {
-
-                            }
-
-                            @Override
-                            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-
-                            }
-                        })
-                );
             }
 
             @Override

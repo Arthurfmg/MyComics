@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Comic Hoarder</string>
+    <string name="app_name">MyComics</string>
     <string name="id_label">The ID is</string>
     <string name="id_value">[id]</string>
     <string name="content_label">The Content is</string>

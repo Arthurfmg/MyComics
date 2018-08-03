@@ -2,7 +2,10 @@ package com.dledford.comichoarder.ui.adapter;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
+import android.transition.AutoTransition;
+import android.transition.TransitionManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +14,7 @@ import android.widget.TextView;
 
 import com.dledford.comichoarder.R;
 import com.dledford.comichoarder.rest.model.ComicVineIssueModel;
+import com.dledford.comichoarder.ui.activity.IssuesListActivity;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -19,6 +23,7 @@ public class IssueAdapter extends RecyclerView.Adapter<IssueAdapter.MyViewHolder
 
     private List<ComicVineIssueModel> issue;
     private Context context;
+    private boolean isExpand;
 
     public IssueAdapter(List<ComicVineIssueModel> issue, Context context) {
         this.issue = issue;
@@ -34,8 +39,8 @@ public class IssueAdapter extends RecyclerView.Adapter<IssueAdapter.MyViewHolder
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        ComicVineIssueModel issueModel = issue.get(position);
+    public void onBindViewHolder(@NonNull final MyViewHolder holder, int position) {
+        final ComicVineIssueModel issueModel = issue.get(position);
 
         //verifica se existe um título, se não houver ele informa que não há titulo
         if(issueModel.getName() != null){
@@ -58,6 +63,27 @@ public class IssueAdapter extends RecyclerView.Adapter<IssueAdapter.MyViewHolder
         }
 
         holder.edicao.setText("Issue #" + issueModel.getIssue_number());
+
+        //Formata o texto das informações para não haver tag HTML e seta as informações como invisivel
+        String textoFormatado = issueModel.getDescription().replaceAll("<.*?>", "");
+        holder.informacoes.setText(textoFormatado);
+        holder.informacoes.setVisibility(View.GONE);
+
+        //Transforma a seta em um botão fazendo aparecer/desaparecer as informções
+        holder.seta.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(isExpand){
+                    holder.seta.animate().rotation(0).start();
+                    isExpand = false;
+                    holder.informacoes.setVisibility(View.GONE);
+                }else {
+                    holder.seta.animate().rotation(180).start();
+                    isExpand = true;
+                    holder.informacoes.setVisibility(View.VISIBLE);
+                }
+            }
+        });
     }
 
     @Override
@@ -72,6 +98,8 @@ public class IssueAdapter extends RecyclerView.Adapter<IssueAdapter.MyViewHolder
         private TextView edicao;
         private ImageView capa;
         private ImageView check;
+        private TextView informacoes;
+        private ImageView seta;
 
         public MyViewHolder(View itemView) {
             super(itemView);
@@ -79,6 +107,8 @@ public class IssueAdapter extends RecyclerView.Adapter<IssueAdapter.MyViewHolder
             titulo = itemView.findViewById(R.id.idTitulo);
             capa = itemView.findViewById(R.id.idImagemEdicao);
             edicao = itemView.findViewById(R.id.idEdicao);
+            informacoes = itemView.findViewById(R.id.idInformacoes);
+            seta = itemView.findViewById(R.id.idSetaInformacoes);
         }
     }
 }
