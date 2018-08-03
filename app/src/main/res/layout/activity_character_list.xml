@@ -8,7 +8,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.dledford.comichoarder.ui.activity.CharacterListActivity">
+    tools:context="com.dledford.comichoarder.com.arthurfmg.comichoarder.ui.activity.CharacterListActivity">
 
         <ListView
             android:id="@+id/character_list"

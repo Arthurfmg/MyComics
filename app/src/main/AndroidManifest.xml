@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.dledford.comichoarder">
+    package="com.arthurfmg.mycomics">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -21,7 +21,8 @@
         <activity android:name=".ui.activity.CharacterActivity" />
         <activity android:name=".ui.activity.VolumeListActivity" />
         <activity android:name=".ui.activity.VolumeActivity" />
-        <activity android:name=".ui.activity.IssuesListActivity"></activity>
+        <activity android:name=".ui.activity.IssuesListActivity" />
+        <activity android:name=".ui.activity.CadastroActivity"></activity>
     </application>
 
 </manifest>

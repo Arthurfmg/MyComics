@@ -1,15 +1,13 @@
 package com.dledford.comichoarder;
 
-import com.dledford.comichoarder.rest.model.ComicVineCharacterModel;
-import com.dledford.comichoarder.rest.model.ComicVineIssueModel;
-import com.dledford.comichoarder.rest.model.ComicVineModel;
-import com.dledford.comichoarder.rest.services.ComicVineService;
+import com.arthurfmg.mycomics.rest.model.ComicVineCharacterModel;
+import com.arthurfmg.mycomics.rest.model.ComicVineIssueModel;
+import com.arthurfmg.mycomics.rest.services.ComicVineService;
 
 import junit.framework.Assert;
 
 import org.junit.Test;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;

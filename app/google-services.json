@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "508171325559",
+    "firebase_url": "https://mycomics-e0944.firebaseio.com",
+    "project_id": "mycomics-e0944",
+    "storage_bucket": "mycomics-e0944.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:508171325559:android:86b8c0eb0439a6a9",
+        "android_client_info": {
+          "package_name": "com.arthurfmg.mycomics"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "508171325559-3irlmj705tdgiut2d20se8nekek3sv00.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.arthurfmg.mycomics",
+            "certificate_hash": "16b83004c161d3cc5b58e2c4a457dc9fb925e712"
+          }
+        },
+        {
+          "client_id": "508171325559-cbr295u7mgq9lg8a13uv1v8kusrhf1gb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDXJyQV8hf1FymUUzFaGZdCepwtHyklzVM"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "508171325559-cbr295u7mgq9lg8a13uv1v8kusrhf1gb.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
