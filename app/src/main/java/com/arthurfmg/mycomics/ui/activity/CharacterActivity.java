@@ -8,7 +8,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.dledford.comichoarder.R;
+import com.arthurfmg.mycomics.R;
 import com.arthurfmg.mycomics.common.ExceptionHandler;
 import com.arthurfmg.mycomics.rest.model.ComicVineCharacterModel;
 import com.arthurfmg.mycomics.rest.model.ComicVineIssueModel;

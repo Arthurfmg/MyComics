@@ -3,7 +3,7 @@ package com.arthurfmg.mycomics.ui.activity;
         import android.app.Activity;
         import android.os.Bundle;
 
-        import com.dledford.comichoarder.R;
+        import com.arthurfmg.mycomics.R;
         import com.arthurfmg.mycomics.common.ExceptionHandler;
         import com.arthurfmg.mycomics.rest.model.ComicVineCharacterModel;
 

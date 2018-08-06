@@ -7,8 +7,6 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.ImageView;
 
-import com.dledford.comichoarder.R;
-
 import java.io.InputStream;
 import java.lang.ref.WeakReference;
 import java.net.HttpURLConnection;

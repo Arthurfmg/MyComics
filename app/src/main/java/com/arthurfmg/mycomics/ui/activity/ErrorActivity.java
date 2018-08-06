@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.widget.TextView;
 
-import com.dledford.comichoarder.R;
+import com.arthurfmg.mycomics.R;
 import com.arthurfmg.mycomics.common.ExceptionHandler;
 
 /**

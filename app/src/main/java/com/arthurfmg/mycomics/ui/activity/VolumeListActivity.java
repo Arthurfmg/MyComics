@@ -9,7 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 
-import com.dledford.comichoarder.R;
+import com.arthurfmg.mycomics.R;
 import com.arthurfmg.mycomics.common.ExceptionHandler;
 import com.arthurfmg.mycomics.common.RecyclerItemClickListener;
 import com.arthurfmg.mycomics.rest.model.ComicVineResult;

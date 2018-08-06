@@ -9,8 +9,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.arthurfmg.mycomics.R;
 import com.arthurfmg.mycomics.rest.model.ComicVineIssueModel;
-import com.dledford.comichoarder.R;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;

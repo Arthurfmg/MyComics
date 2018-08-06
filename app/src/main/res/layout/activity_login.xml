@@ -7,58 +7,58 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center_vertical|center_horizontal"
-    tools:context=".ui.activity.CadastroActivity">
+    tools:context=".ui.activity.LoginActivity">
 
     <ImageView
-        android:id="@+id/imageView2"
+        android:id="@+id/imageView3"
         android:layout_width="200dp"
         android:layout_height="100dp"
+        android:layout_margin="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@mipmap/ic_launcher" />
 
-    <EditText
-        android:id="@+id/idTxtNome"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
-        android:hint="Digite seu nome"
-        android:inputType="textPersonName"
-        android:textAlignment="center"/>
+    <ImageView
+        android:id="@+id/idFaceLogo"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_margin="8dp"
+        app:srcCompat="@drawable/ic_action_facebook" />
 
     <EditText
-        android:id="@+id/idTxtEmail"
+        android:id="@+id/idEmailLogin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
+        android:layout_margin="8dp"
+        android:ems="10"
         android:hint="Digite seu email"
         android:inputType="textEmailAddress"
         android:textAlignment="center" />
 
     <EditText
-        android:id="@+id/idTxtSenha"
+        android:id="@+id/idSenhaLogin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
-        android:hint="Digite a senha"
+        android:layout_margin="8dp"
+        android:ems="10"
+        android:hint="Digite sua senha"
         android:inputType="textPassword"
         android:textAlignment="center" />
 
     <Button
-        android:id="@+id/idBotaoCadastrar"
+        android:id="@+id/idBotaoLogin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
-        android:text="Cadastrar"/>
+        android:layout_margin="8dp"
+        android:text="Entrar" />
 
+    <TextView
+        android:id="@+id/idTxtCadastro"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:text="Não tem conta? Cadastre-se!"
+        android:textAlignment="center" />
 </LinearLayout>

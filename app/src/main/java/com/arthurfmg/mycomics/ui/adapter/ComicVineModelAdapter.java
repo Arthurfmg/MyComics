@@ -8,7 +8,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.dledford.comichoarder.R;
+import com.arthurfmg.mycomics.R;
 import com.arthurfmg.mycomics.rest.model.VolumeModel;
 import com.squareup.picasso.Picasso;
 
