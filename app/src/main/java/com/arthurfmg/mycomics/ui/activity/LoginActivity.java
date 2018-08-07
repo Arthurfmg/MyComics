@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -17,10 +18,19 @@ import com.arthurfmg.mycomics.common.Base64Custom;
 import com.arthurfmg.mycomics.common.ConfigFirebase;
 import com.arthurfmg.mycomics.common.Preferencias;
 import com.arthurfmg.mycomics.rest.model.UserModel;
+import com.facebook.AccessToken;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -35,11 +45,14 @@ public class LoginActivity extends AppCompatActivity {
 
     private DatabaseReference referenciaFirebase;
     private FirebaseAuth autenticacao;
+    CallbackManager mCallbackManager;
 
     private UserModel usuario;
 
     private ValueEventListener valueEventListener;
     private String identificadorUsuarioLogado;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +61,7 @@ public class LoginActivity extends AppCompatActivity {
 
         verificarUsuarioLogado();
 
-        faceLogo = findViewById(R.id.idFaceLogo);
+        //faceLogo = findViewById(R.id.idFaceLogo);
         email = findViewById(R.id.idEmailLogin);
         senha = findViewById(R.id.idSenhaLogin);
         login = findViewById(R.id.idBotaoLogin);
@@ -70,6 +83,8 @@ public class LoginActivity extends AppCompatActivity {
                 abrirTelaCadastro();
             }
         });
+
+        FacebookLogin();
     }
 
     private void verificarUsuarioLogado(){
@@ -109,6 +124,50 @@ public class LoginActivity extends AppCompatActivity {
                     Toast.makeText(LoginActivity.this, "Sucesso ao fazer login", Toast.LENGTH_LONG).show();
                 } else {
                     Toast.makeText(LoginActivity.this, "Erro ao fazer login " + task.getException(), Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+    }
+
+    public void FacebookLogin(){
+        mCallbackManager = CallbackManager.Factory.create();
+        LoginButton loginButton = (LoginButton) findViewById(R.id.idFacebook);
+        loginButton.setReadPermissions("email", "public_profile");
+
+        loginButton.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+                handleFacebookAccessToken(loginResult.getAccessToken());
+            }
+
+            @Override
+            public void onCancel() {
+
+            }
+
+            @Override
+            public void onError(FacebookException error) {
+
+            }
+        });
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        mCallbackManager.onActivityResult(requestCode, resultCode, data);
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    private void handleFacebookAccessToken(AccessToken token){
+        AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
+        autenticacao.signInWithCredential(credential).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if(task.isSuccessful()){
+                    //entrou com sucesso
+                    FirebaseUser user = autenticacao.getCurrentUser();
+                    abrirTelaPrincipal();
+                } else {
+                    Toast.makeText(LoginActivity.this, "Falha ao entrar com Facebook." + task.getException(), Toast.LENGTH_LONG).show();
                 }
             }
         });

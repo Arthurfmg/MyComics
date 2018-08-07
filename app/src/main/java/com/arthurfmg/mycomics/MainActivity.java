@@ -10,6 +10,7 @@ import android.widget.EditText;
 import com.arthurfmg.mycomics.common.ConfigFirebase;
 import com.arthurfmg.mycomics.ui.activity.LoginActivity;
 import com.arthurfmg.mycomics.ui.activity.VolumeListActivity;
+import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class MainActivity extends AppCompatActivity {
@@ -48,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void deslogarUsuario(){
         autenticacao.signOut();
+        LoginManager.getInstance().logOut();
         Intent intent = new Intent(MainActivity.this, LoginActivity.class);
         startActivity(intent);
         finish();

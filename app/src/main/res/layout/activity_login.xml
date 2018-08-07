@@ -19,12 +19,12 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@mipmap/ic_launcher" />
 
-    <ImageView
-        android:id="@+id/idFaceLogo"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_margin="8dp"
-        app:srcCompat="@drawable/ic_action_facebook" />
+    <com.facebook.login.widget.LoginButton
+        android:id="@+id/idFacebook"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="8dp" />
 
     <EditText
         android:id="@+id/idEmailLogin"
