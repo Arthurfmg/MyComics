@@ -1,1 +1,1 @@
-# comic_hoarder
+# MyComics
