@@ -22,6 +22,8 @@ import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -36,8 +38,11 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
+import org.json.JSONObject;
+
+import java.util.Arrays;
+
 public class LoginActivity extends AppCompatActivity {
-    private ImageView faceLogo;
     private EditText email;
     private EditText senha;
     private Button login;
@@ -61,7 +66,6 @@ public class LoginActivity extends AppCompatActivity {
 
         verificarUsuarioLogado();
 
-        //faceLogo = findViewById(R.id.idFaceLogo);
         email = findViewById(R.id.idEmailLogin);
         senha = findViewById(R.id.idSenhaLogin);
         login = findViewById(R.id.idBotaoLogin);
@@ -131,13 +135,42 @@ public class LoginActivity extends AppCompatActivity {
 
     public void FacebookLogin(){
         mCallbackManager = CallbackManager.Factory.create();
-        LoginButton loginButton = (LoginButton) findViewById(R.id.idFacebook);
-        loginButton.setReadPermissions("email", "public_profile");
+        final LoginButton loginButton = (LoginButton) findViewById(R.id.idFacebook);
+        loginButton.setReadPermissions(Arrays.asList("email", "public_profile"));
 
         loginButton.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
                 handleFacebookAccessToken(loginResult.getAccessToken());
+
+                //cadastrar o login do Facebook no  banco de dados do Firebase
+                GraphRequest request = GraphRequest.newMeRequest(loginResult.getAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
+                    @Override
+                    public void onCompleted(JSONObject object, GraphResponse response) {
+                        Log.v("LoginActivity", response.toString());
+                        try{
+                            UserModel user = new UserModel();
+                            user.setNome(object.getString("name"));
+                            user.setEmail(object.getString("email"));
+
+                            String identificadorUsuario = Base64Custom.codificarBase64(user.getEmail());
+
+                            user.setId(identificadorUsuario);
+                            user.Salvar();
+
+                            Preferencias preferencias = new Preferencias(LoginActivity.this);
+                            preferencias.salvarDados(identificadorUsuario, user.getNome());
+                        }catch (Exception e){
+                            e.printStackTrace();
+                        }
+                    }
+                });
+
+                Bundle parameters = new Bundle();
+                parameters.putString("fields", "name, email, id");
+                request.setParameters(parameters);
+                request.executeAsync();
+
             }
 
             @Override
@@ -157,7 +190,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    private void handleFacebookAccessToken(AccessToken token){
+    private void handleFacebookAccessToken(final AccessToken token){
         AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
         autenticacao.signInWithCredential(credential).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
             @Override
@@ -165,6 +198,7 @@ public class LoginActivity extends AppCompatActivity {
                 if(task.isSuccessful()){
                     //entrou com sucesso
                     FirebaseUser user = autenticacao.getCurrentUser();
+
                     abrirTelaPrincipal();
                 } else {
                     Toast.makeText(LoginActivity.this, "Falha ao entrar com Facebook." + task.getException(), Toast.LENGTH_LONG).show();

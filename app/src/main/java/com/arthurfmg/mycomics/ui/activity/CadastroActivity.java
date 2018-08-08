@@ -44,7 +44,6 @@ public class CadastroActivity extends AppCompatActivity {
         senha = findViewById(R.id.idTxtSenha);
         botaoCadastrar = findViewById(R.id.idBotaoCadastrar);
 
-        //é quase isso, mas não é isso... veja exemplos do Whatsapp...
         botaoCadastrar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
