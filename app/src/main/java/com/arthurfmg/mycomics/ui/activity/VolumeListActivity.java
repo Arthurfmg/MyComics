@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 
 import com.arthurfmg.mycomics.R;
 import com.arthurfmg.mycomics.common.ExceptionHandler;
@@ -36,7 +37,7 @@ public class VolumeListActivity extends Activity{
     public final static String VOLUME_ID = "com.dledford.mycomics.VOLUME_ID";
     VolumeModel bestMatch = null;
     private RecyclerView recyclerVolume;
-    //private List<VolumeModel> volumes = new ArrayList<>();
+    private ImageView estrela;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -45,6 +46,7 @@ public class VolumeListActivity extends Activity{
         setContentView(R.layout.activity_volume_list);
 
         recyclerVolume = findViewById(R.id.idRecycler);
+        estrela = findViewById(R.id.idEstrela);
 
         //define layout
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
