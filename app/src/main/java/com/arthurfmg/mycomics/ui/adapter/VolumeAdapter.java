@@ -4,17 +4,20 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.arthurfmg.mycomics.R;
 import com.arthurfmg.mycomics.common.Base64Custom;
 import com.arthurfmg.mycomics.common.ConfigFirebase;
 import com.arthurfmg.mycomics.common.Preferencias;
 import com.arthurfmg.mycomics.rest.model.ComicVineModel;
+import com.arthurfmg.mycomics.rest.model.UserModel;
 import com.arthurfmg.mycomics.rest.model.VolumeModel;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -70,8 +73,11 @@ public class VolumeAdapter extends RecyclerView.Adapter<VolumeAdapter.MyViewHold
         holder.estrela.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Log.v("VolumeAdapter", "Id: " + volumeModel.getId() +
+                        "\n Nome: " + volumeModel.getName() + "\n Api: " + volumeModel.getApi_detail_url());
                 holder.estrela.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_star_black_24dp));
-                cadastraVolumeFirebase();
+                cadastraVolumeFirebase(volumeModel.getId(), volumeModel.getName(), volumeModel.getApi_detail_url());
+
             }
         });
     }
@@ -100,21 +106,21 @@ public class VolumeAdapter extends RecyclerView.Adapter<VolumeAdapter.MyViewHold
         }
     }
 
-    public void cadastraVolumeFirebase(){
+    public void cadastraVolumeFirebase(final Long id, final String name, final String api_detail_url){
 
-        firebase.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+        comicVineModel = new ComicVineModel();
+        autenticacao = ConfigFirebase.getFirebaseAutenticacao();
+        String usuario = autenticacao.getCurrentUser().getEmail().toString();
 
-                //recuperar identificador do usuario (base64)
-                Preferencias preferencias = new Preferencias(context);
-                String identificadorUsuarioLogado = preferencias.getIdentificador();
-            }
+        usuario = Base64Custom.codificarBase64(usuario);
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
+        comicVineModel.setId(id);
+        comicVineModel.setName(name);
+        comicVineModel.setApi_detail_url(api_detail_url);
 
-            }
-        });
+        firebase = ConfigFirebase.getFirebase();
+        firebase.child("colecao").child(usuario).setValue(comicVineModel);
+
+        Toast.makeText(context, comicVineModel.getName() + " está nos favoritos!", Toast.LENGTH_LONG).show();
     }
 }

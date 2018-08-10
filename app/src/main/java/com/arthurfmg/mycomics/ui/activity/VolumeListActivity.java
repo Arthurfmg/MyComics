@@ -34,7 +34,7 @@ import static com.arthurfmg.mycomics.MainActivity.SEARCH_MESSAGE;
 
 public class VolumeListActivity extends Activity{
     ArrayList<VolumeModel> volume = new ArrayList<>();
-    public final static String VOLUME_ID = "com.dledford.mycomics.VOLUME_ID";
+    public final static String VOLUME_ID = "com.arthurfmg.mycomics.VOLUME_ID";
     VolumeModel bestMatch = null;
     private RecyclerView recyclerVolume;
     private ImageView estrela;
