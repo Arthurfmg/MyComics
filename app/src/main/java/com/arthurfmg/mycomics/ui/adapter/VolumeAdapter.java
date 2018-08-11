@@ -26,6 +26,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /*
@@ -35,15 +36,16 @@ import java.util.List;
 
 public class VolumeAdapter extends RecyclerView.Adapter<VolumeAdapter.MyViewHolder>{
 
-    private List<VolumeModel> volume;
+    private ArrayList<VolumeModel> volume;
     private Context context;
     private FirebaseAuth autenticacao;
     private DatabaseReference firebase;
     private VolumeModel volumeModel;
-    private String identificadorUsuario;
     private ComicVineModel comicVineModel;
+    private ArrayList<ComicVineModel> listaVineModel;
 
-    public VolumeAdapter(Context c, List<VolumeModel> volume) {
+
+    public VolumeAdapter(Context c, ArrayList<VolumeModel> volume) {
         this.volume = volume;
         this.context = c;
     }
@@ -57,7 +59,7 @@ public class VolumeAdapter extends RecyclerView.Adapter<VolumeAdapter.MyViewHold
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final MyViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final MyViewHolder holder, final int position) {
         volumeModel = volume.get(position);
 
         holder.nome.setText(volumeModel.getName());
@@ -73,11 +75,26 @@ public class VolumeAdapter extends RecyclerView.Adapter<VolumeAdapter.MyViewHold
         holder.estrela.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.v("VolumeAdapter", "Id: " + volumeModel.getId() +
-                        "\n Nome: " + volumeModel.getName() + "\n Api: " + volumeModel.getApi_detail_url());
                 holder.estrela.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_star_black_24dp));
-                cadastraVolumeFirebase(volumeModel.getId(), volumeModel.getName(), volumeModel.getApi_detail_url());
+                //cadastraVolumeFirebase(volumeModel.getId(), volumeModel.getName(), volumeModel.getApi_detail_url());
 
+                comicVineModel = new ComicVineModel();
+                autenticacao = ConfigFirebase.getFirebaseAutenticacao();
+                String usuario = autenticacao.getCurrentUser().getEmail().toString();
+
+                usuario = Base64Custom.codificarBase64(usuario);
+
+                //pega a posição marcada e seta essas informações para irem pro banco
+                comicVineModel.setId(volume.get(position).getId());
+                comicVineModel.setName(volume.get(position).getName());
+                comicVineModel.setApi_detail_url(volume.get(position).getApi_detail_url());
+
+                //salva a revista no Firebase no formato de: colecao - nome da revista (ano) - dados do volume
+                firebase = ConfigFirebase.getFirebase();
+                firebase.child("colecao").child(usuario).child(comicVineModel.getName() +
+                        "(" + volume.get(position).getStart_year() + ")").setValue(comicVineModel);
+
+                Toast.makeText(context, comicVineModel.getName() + " está nos favoritos!", Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -106,7 +123,7 @@ public class VolumeAdapter extends RecyclerView.Adapter<VolumeAdapter.MyViewHold
         }
     }
 
-    public void cadastraVolumeFirebase(final Long id, final String name, final String api_detail_url){
+    /*public void cadastraVolumeFirebase(int position){
 
         comicVineModel = new ComicVineModel();
         autenticacao = ConfigFirebase.getFirebaseAutenticacao();
@@ -119,8 +136,8 @@ public class VolumeAdapter extends RecyclerView.Adapter<VolumeAdapter.MyViewHold
         comicVineModel.setApi_detail_url(api_detail_url);
 
         firebase = ConfigFirebase.getFirebase();
-        firebase.child("colecao").child(usuario).setValue(comicVineModel);
+        firebase.child("colecao").child(usuario).child(comicVineModel.getName()).setValue(comicVineModel);
 
         Toast.makeText(context, comicVineModel.getName() + " está nos favoritos!", Toast.LENGTH_LONG).show();
-    }
+    }*/
 }
