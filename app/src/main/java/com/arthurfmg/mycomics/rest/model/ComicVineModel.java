@@ -1,13 +1,19 @@
 package com.arthurfmg.mycomics.rest.model;
 
+import com.google.firebase.database.IgnoreExtraProperties;
+
 /**
  * Created by phesto on 11/18/2016.
  */
 
+@IgnoreExtraProperties
 public class ComicVineModel {
     private Long id;
     private String name;
     private String api_detail_url;
+
+    public ComicVineModel() {
+    }
 
     public Long getId() {
         return id;

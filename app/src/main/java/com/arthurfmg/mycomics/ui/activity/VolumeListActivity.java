@@ -71,7 +71,7 @@ public class VolumeListActivity extends Activity{
         new ComicVineService().findVolumeByName(volumeSearchText).enqueue(new Callback<ComicVineResult<ArrayList<VolumeModel>>>() {
             @Override
             public void onResponse(Call<ComicVineResult<ArrayList<VolumeModel>>> call,
-                                   Response<ComicVineResult<ArrayList<VolumeModel>>> response) {
+                                   final Response<ComicVineResult<ArrayList<VolumeModel>>> response) {
                 Log.d("IComicVineService", "Successfully response fetched");
                 volume = response.body().getResults();
                 volume = new VolumeService().sortBestMatch(textoDefinitivo, volume);
@@ -101,40 +101,6 @@ public class VolumeListActivity extends Activity{
                             }
                         })
                 );
-
-                comicVineModel = new ArrayList<>();
-                autenticacao = ConfigFirebase.getFirebaseAutenticacao();
-                String usuario = autenticacao.getCurrentUser().getEmail().toString();
-
-                usuario = Base64Custom.codificarBase64(usuario);
-                firebase = ConfigFirebase.getFirebase().child("colecao").child(usuario);
-
-                //isso não está funcionando...
-                eventListenerVolume = new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        comicVineModel.clear();
-
-                        for(DataSnapshot dados : dataSnapshot.getChildren()){
-                            ComicVineModel vineModel = dados.getValue(ComicVineModel.class);
-                            comicVineModel.add(vineModel);
-
-                            if(comicVineModel.contains(dados.getValue(ComicVineModel.class))){
-                                Log.i("teste", dados.getValue(ComicVineModel.class).toString());
-                                estrela.setImageDrawable(ContextCompat.getDrawable(VolumeListActivity.this,
-                                        R.drawable.ic_star_black_24dp));
-                            }
-                        }
-                        adapter.notifyDataSetChanged();
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-                };
-
-                firebase.addValueEventListener(eventListenerVolume);
             }
 
             @Override
