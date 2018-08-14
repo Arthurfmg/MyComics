@@ -155,7 +155,7 @@ public class LoginActivity extends AppCompatActivity {
 
                             String identificadorUsuario = Base64Custom.codificarBase64(user.getEmail());
 
-                            user.setId(identificadorUsuario);
+                            user.setIdUsuario(identificadorUsuario);
                             user.Salvar();
 
                             Preferencias preferencias = new Preferencias(LoginActivity.this);

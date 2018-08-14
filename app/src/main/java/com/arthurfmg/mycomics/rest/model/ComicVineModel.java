@@ -6,8 +6,8 @@ import com.google.firebase.database.IgnoreExtraProperties;
  * Created by phesto on 11/18/2016.
  */
 
-@IgnoreExtraProperties
-public class ComicVineModel {
+
+public class ComicVineModel{
     private Long id;
     private String name;
     private String api_detail_url;
@@ -38,5 +38,7 @@ public class ComicVineModel {
     public void setApi_detail_url(String api_detail_url) {
         this.api_detail_url = api_detail_url;
     }
-    
+
+
+
 }

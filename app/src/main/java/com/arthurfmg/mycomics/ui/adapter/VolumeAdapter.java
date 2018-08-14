@@ -16,11 +16,13 @@ import com.arthurfmg.mycomics.R;
 import com.arthurfmg.mycomics.common.Base64Custom;
 import com.arthurfmg.mycomics.common.ConfigFirebase;
 import com.arthurfmg.mycomics.rest.model.ComicVineModel;
+import com.arthurfmg.mycomics.rest.model.UserModel;
 import com.arthurfmg.mycomics.rest.model.VolumeModel;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
@@ -33,13 +35,13 @@ import java.util.ArrayList;
 
 public class VolumeAdapter extends RecyclerView.Adapter<VolumeAdapter.MyViewHolder>{
 
-    private ArrayList<VolumeModel> volume;
+    private ArrayList<VolumeModel> volume = new ArrayList<>();
     private Context context;
     private FirebaseAuth autenticacao;
     private DatabaseReference firebase;
-    private VolumeModel volumeModel;
-    private ComicVineModel comicVineModel;
-    private ArrayList<ComicVineModel> listaVineModel;
+    private VolumeModel volumeModel = new VolumeModel();
+    private ComicVineModel comicVineModel = new ComicVineModel();
+    private ArrayList<ComicVineModel> listaVineModel = new ArrayList<>();;
     private ValueEventListener eventListenerVolume;
 
 
@@ -60,8 +62,6 @@ public class VolumeAdapter extends RecyclerView.Adapter<VolumeAdapter.MyViewHold
     public void onBindViewHolder(@NonNull final MyViewHolder holder, final int position) {
         volumeModel = volume.get(position);
 
-        comicVineModel = new ComicVineModel();
-
         holder.nome.setText(volumeModel.getName());
         Picasso.with(context)
                 .load(volume.get(position).getImage().getThumb_url())
@@ -72,7 +72,7 @@ public class VolumeAdapter extends RecyclerView.Adapter<VolumeAdapter.MyViewHold
         holder.edicoes.setText(volumeModel.getCount_of_issues());
         holder.editora.setText(volumeModel.getPublisher().getName());
 
-        firebase = ConfigFirebase.getFirebase();
+        //firebase = ConfigFirebase.getFirebase();
 
         holder.estrela.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -86,33 +86,34 @@ public class VolumeAdapter extends RecyclerView.Adapter<VolumeAdapter.MyViewHold
                 comicVineModel.setApi_detail_url(volume.get(position).getApi_detail_url());
 
                 //salva a revista no Firebase no formato de: colecao - nome da revista (ano) - dados do volume
-                firebase.child("colecao").child(usuario()).child(comicVineModel.getId().toString()).setValue(comicVineModel);
+                firebase = FirebaseDatabase.getInstance().getReference(usuario());
+                firebase.child("colecao").child("volume").setValue(comicVineModel);
 
                 Toast.makeText(context, comicVineModel.getName() + " está nos favoritos!", Toast.LENGTH_LONG).show();
             }
         });
 
-        listaVineModel = new ArrayList<>();
-
-        firebase.child("colecao").child(usuario()).child(volumeModel.getId().toString());
+        firebase = FirebaseDatabase.getInstance().getReference("colecao");
+        //firebase.child("colecao").child(usuario());
         //Log.i("teste", firebase.toString());
 
         eventListenerVolume = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                listaVineModel.clear();
+                comicVineModel = dataSnapshot.getValue(UserModel.class);
+                Log.i("VolumeAdapter", "nome: " + comicVineModel.getName());
 
-                for(DataSnapshot dados : dataSnapshot.getChildren()){
-                    comicVineModel = dados.getValue(ComicVineModel.class);
+                /*for(DataSnapshot dados : dataSnapshot.getChildren()){
+                    comicVineModel = dados.getValue(UserModel.class);
                     listaVineModel.add(comicVineModel);
-                }
-                VolumeAdapter.this.notifyDataSetChanged();
-                Log.i("teste", "Nome da revista: " + listaVineModel.get(position).getName());
+                    Log.i("VolumeAdapter", "tamanho: " + listaVineModel.size());
+                    //Toast.makeText(context, listaVineModel.get(position).getName() + " está nos favoritos!", Toast.LENGTH_LONG).show();
 
-                if(listaVineModel.get(position).getId() == volume.get(position).getId()){
-                    holder.estrela.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_star_black_24dp));
-                    Log.i("teste", "Entrei no if");
-                }
+                    if(listaVineModel.contains(comicVineModel.getId())){
+                        Log.i("teste", "Entrei no if");
+                    }
+                }*/
+                VolumeAdapter.this.notifyDataSetChanged();
             }
 
             @Override

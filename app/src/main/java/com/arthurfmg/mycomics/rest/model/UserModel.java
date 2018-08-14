@@ -4,11 +4,12 @@ import com.arthurfmg.mycomics.common.ConfigFirebase;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Exclude;
 
-public class UserModel {
+public class UserModel extends ComicVineModel{
     private String email;
     private String senha;
     private String nome;
-    private String id;
+    private String idUsuario;
+    private String idVolume;
 
     public UserModel(){
 
@@ -16,16 +17,16 @@ public class UserModel {
 
     public void Salvar(){
         DatabaseReference referencia = ConfigFirebase.getFirebase();
-        referencia.child("Usuarios").child(getId()).setValue(this);
+        referencia.child("Usuarios").child(getIdUsuario()).setValue(this);
     }
 
     @Exclude
-    public String getId() {
-        return id;
+    public String getIdUsuario() {
+        return idUsuario;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setIdUsuario(String id) {
+        this.idUsuario = id;
     }
 
     public String getEmail() {
@@ -51,5 +52,13 @@ public class UserModel {
 
     public void setNome(String nome) {
         this.nome = nome;
+    }
+
+    public String getVolume() {
+        return idVolume;
+    }
+
+    public void setVolume(String idVolume) {
+        this.idVolume = idVolume;
     }
 }
