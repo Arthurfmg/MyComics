@@ -59,6 +59,9 @@ public class VolumeAdapter extends RecyclerView.Adapter<VolumeAdapter.MyViewHold
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemLista = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_volume, parent, false);
 
+        firebase = ConfigFirebase.getFirebase();
+
+
         return new MyViewHolder(itemLista);
     }
 
@@ -97,10 +100,16 @@ public class VolumeAdapter extends RecyclerView.Adapter<VolumeAdapter.MyViewHold
             }
         });
 
-        firebase = ConfigFirebase.getFirebase();
         firebase.child(usuario()).child(volumeModel.getId().toString());
         recuperarDados(volumeModel.getId().toString(), holder.estrela);
         firebase.addChildEventListener(childListenerVolume);
+
+        for(ComicVineModel novaLista : listaVineModel){
+            //Log.i("comicvine", "nova lista... " + novaLista.getId());
+            if(volumeModel.getId() == novaLista.getId()){
+                Log.i("comicvine", "entrei no if!");
+            }
+        }
 
     }
 
@@ -147,9 +156,12 @@ public class VolumeAdapter extends RecyclerView.Adapter<VolumeAdapter.MyViewHold
                 for(DataSnapshot dados : dataSnapshot.getChildren()) {
                     comicVineModel = dados.getValue(ComicVineModel.class);
                     listaVineModel.add(comicVineModel);
+                    if(comicVineModel.getId().toString().equals(id)){
+                        Log.i("comicvine", "entrei no if!");
+                        estrela.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_star_black_24dp));
+                    }
                 }
-                Log.i("comicvine", "tamanho: " + listaVineModel.size());
-                //VolumeAdapter.this.notifyDataSetChanged();
+                VolumeAdapter.this.notifyDataSetChanged();
             }
 
             @Override
@@ -173,21 +185,5 @@ public class VolumeAdapter extends RecyclerView.Adapter<VolumeAdapter.MyViewHold
             }
         };
 
-        /*eventListenerVolume = new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for(DataSnapshot dados : dataSnapshot.getChildren()) {
-                    comicVineModel = dados.getValue(ComicVineModel.class);
-                    listaVineModel.add(comicVineModel);
-                    Log.i("teste", "teste: " + comicVineModel.getId());
-                }
-                VolumeAdapter.this.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        };*/
     }
 }
