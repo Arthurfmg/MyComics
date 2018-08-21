@@ -24,11 +24,12 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+
+import static com.arthurfmg.mycomics.R.drawable.ic_star_border_black_24dp;
 
 /*
     Adapter que faz listagem do volume pegando os itens do cardVolume e
@@ -84,27 +85,34 @@ public class VolumeAdapter extends RecyclerView.Adapter<VolumeAdapter.MyViewHold
         holder.estrela.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                holder.estrela.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_star_black_24dp));
-                //cadastraVolumeFirebase(volumeModel.getId(), volumeModel.getName(), volumeModel.getApi_detail_url());
+                if(holder.estrela.getTag().equals("isChecked")){
+                    holder.estrela.setImageDrawable(ContextCompat.getDrawable(context, ic_star_border_black_24dp));
+                    //Log.i("teste", "Entrei no if!!");
+                    firebase.child(usuario()).child(volume.get(position).getId().toString()).removeValue();
+                    holder.estrela.setTag("notChecked");
+                    Toast.makeText(context, volume.get(position).getName() + " deletado com sucesso!", Toast.LENGTH_LONG).show();
+                }else {
+                    holder.estrela.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_star_black_24dp));
+                    //cadastraVolumeFirebase(volumeModel.getId(), volumeModel.getName(), volumeModel.getApi_detail_url());
+                    holder.estrela.setTag("isChecked");
 
-                //pega a posição marcada e seta essas informações para irem pro banco
-                comicVineModel.setId(volume.get(position).getId());
-                comicVineModel.setName(volume.get(position).getName());
-                comicVineModel.setApi_detail_url(volume.get(position).getApi_detail_url());
+                    //pega a posição marcada e seta essas informações para irem pro banco
+                    comicVineModel.setId(volume.get(position).getId());
+                    comicVineModel.setName(volume.get(position).getName());
+                    comicVineModel.setApi_detail_url(volume.get(position).getApi_detail_url());
 
-                //salva a revista no Firebase no formato de: colecao - id da revista - dados do volume
-                DatabaseReference firebaseSalvaRevista = FirebaseDatabase.getInstance().getReference(usuario());
-                firebaseSalvaRevista.child(comicVineModel.getId().toString()).setValue(comicVineModel);
+                    //salva a revista no Firebase no formato de: colecao - id da revista - dados do volume
+                    DatabaseReference firebaseSalvaRevista = FirebaseDatabase.getInstance().getReference(usuario());
+                    firebaseSalvaRevista.child(comicVineModel.getId().toString()).setValue(comicVineModel);
 
-                Toast.makeText(context, comicVineModel.getName() + " está nos favoritos!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(context, comicVineModel.getName() + " está nos favoritos!", Toast.LENGTH_LONG).show();
+                }
             }
         });
 
         firebase.child(usuario()).child(volumeModel.getId().toString());
         recuperarDados(volumeModel.getId().toString(), holder.estrela);
         firebase.addChildEventListener(childListenerVolume);
-
-        //holder.setarInformacoes();
     }
 
     @Override
@@ -139,17 +147,6 @@ public class VolumeAdapter extends RecyclerView.Adapter<VolumeAdapter.MyViewHold
             editora = itemView.findViewById(R.id.idEditora);
             estrela = itemView.findViewById(R.id.idEstrela);
         }
-
-        /*public void setarInformacoes(){
-            /*for(ComicVineModel novaLista : listaVineModel){
-                if(novaLista.getId().toString().equals(volumeModel.getId().toString())){
-                    //Log.i("comicvine", "entrei no if!");
-                    estrela.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_star_black_24dp));
-                } else {
-                    estrela.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_star_border_black_24dp));
-                }
-            }
-        }*/
     }
 
 
@@ -173,8 +170,8 @@ public class VolumeAdapter extends RecyclerView.Adapter<VolumeAdapter.MyViewHold
                     comicVineModel = dados.getValue(ComicVineModel.class);
                     listaVineModel.add(comicVineModel);
                     if(comicVineModel.getId().toString().equals(id)){
-                        //Log.i("comicvine", "entrei no if!");
                         estrela.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_star_black_24dp));
+                        estrela.setTag("isChecked");
                     } else {
                         //estrela.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_star_border_black_24dp));
                     }
