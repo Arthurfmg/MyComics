@@ -23,6 +23,7 @@ import com.arthurfmg.mycomics.rest.services.ComicVineService;
 import com.arthurfmg.mycomics.services.VolumeService;
 import com.arthurfmg.mycomics.ui.adapter.VolumeAdapter;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -48,10 +49,10 @@ public class VolumeListActivity extends Activity{
     VolumeModel bestMatch = null;
     private RecyclerView recyclerVolume;
     private ImageView estrela;
-    private ArrayList<ComicVineModel> comicVineModel;
-    private ValueEventListener eventListenerVolume;
+    private ComicVineModel comicVineModel;
     private DatabaseReference firebase;
     private FirebaseAuth autenticacao;
+    private ChildEventListener childListenerVolume;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -61,7 +62,6 @@ public class VolumeListActivity extends Activity{
 
         recyclerVolume = findViewById(R.id.idRecycler);
         estrela = findViewById(R.id.idEstrela);
-        firebase = FirebaseDatabase.getInstance().getReference("colecao");
 
         //define layout
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
@@ -78,7 +78,7 @@ public class VolumeListActivity extends Activity{
                 volume = response.body().getResults();
                 volume = new VolumeService().sortBestMatch(textoDefinitivo, volume);
                 //ComicVineModelAdapter adapter = new ComicVineModelAdapter(VolumeListActivity.this, volume);
-                final VolumeAdapter adapter = new VolumeAdapter(VolumeListActivity.this, volume);
+                VolumeAdapter adapter = new VolumeAdapter(VolumeListActivity.this, volume);
                 //ListView listView = (ListView) findViewById(R.id.volume_list);
                 //listView.setAdapter(adapter);
                 recyclerVolume.setAdapter(adapter);
@@ -103,8 +103,6 @@ public class VolumeListActivity extends Activity{
                             }
                         })
                 );
-
-
             }
 
             @Override
@@ -112,10 +110,6 @@ public class VolumeListActivity extends Activity{
                 Log.d("IComicVineService", "Error Occured: " + t.getMessage());
             }
         });
-
-
-
-
     }
 }
 

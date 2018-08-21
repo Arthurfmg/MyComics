@@ -51,8 +51,9 @@ public class VolumeAdapter extends RecyclerView.Adapter<VolumeAdapter.MyViewHold
     public VolumeAdapter(Context c, ArrayList<VolumeModel> volume) {
         this.volume = volume;
         this.context = c;
-    }
 
+        setHasStableIds(true);
+    }
 
     @NonNull
     @Override
@@ -60,7 +61,6 @@ public class VolumeAdapter extends RecyclerView.Adapter<VolumeAdapter.MyViewHold
         View itemLista = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_volume, parent, false);
 
         firebase = ConfigFirebase.getFirebase();
-
 
         return new MyViewHolder(itemLista);
     }
@@ -104,13 +104,17 @@ public class VolumeAdapter extends RecyclerView.Adapter<VolumeAdapter.MyViewHold
         recuperarDados(volumeModel.getId().toString(), holder.estrela);
         firebase.addChildEventListener(childListenerVolume);
 
-        for(ComicVineModel novaLista : listaVineModel){
-            //Log.i("comicvine", "nova lista... " + novaLista.getId());
-            if(volumeModel.getId() == novaLista.getId()){
-                Log.i("comicvine", "entrei no if!");
-            }
-        }
+        //holder.setarInformacoes();
+    }
 
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return position;
     }
 
     @Override
@@ -135,7 +139,19 @@ public class VolumeAdapter extends RecyclerView.Adapter<VolumeAdapter.MyViewHold
             editora = itemView.findViewById(R.id.idEditora);
             estrela = itemView.findViewById(R.id.idEstrela);
         }
+
+        /*public void setarInformacoes(){
+            /*for(ComicVineModel novaLista : listaVineModel){
+                if(novaLista.getId().toString().equals(volumeModel.getId().toString())){
+                    //Log.i("comicvine", "entrei no if!");
+                    estrela.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_star_black_24dp));
+                } else {
+                    estrela.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_star_border_black_24dp));
+                }
+            }
+        }*/
     }
+
 
     public String usuario(){
         autenticacao = ConfigFirebase.getFirebaseAutenticacao();
@@ -157,8 +173,10 @@ public class VolumeAdapter extends RecyclerView.Adapter<VolumeAdapter.MyViewHold
                     comicVineModel = dados.getValue(ComicVineModel.class);
                     listaVineModel.add(comicVineModel);
                     if(comicVineModel.getId().toString().equals(id)){
-                        Log.i("comicvine", "entrei no if!");
+                        //Log.i("comicvine", "entrei no if!");
                         estrela.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_star_black_24dp));
+                    } else {
+                        //estrela.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_star_border_black_24dp));
                     }
                 }
                 VolumeAdapter.this.notifyDataSetChanged();
@@ -185,5 +203,8 @@ public class VolumeAdapter extends RecyclerView.Adapter<VolumeAdapter.MyViewHold
             }
         };
 
+        if(listaVineModel.size() < this.getItemCount()){
+            listaVineModel.add(comicVineModel);
+        }
     }
 }
