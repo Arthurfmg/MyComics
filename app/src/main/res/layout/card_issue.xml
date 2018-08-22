@@ -61,6 +61,7 @@
 
         <android.support.v7.widget.AppCompatImageView
             android:id="@+id/idUncheck"
+            android:tag="uncheck"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
@@ -70,7 +71,7 @@
             app:layout_constraintBottom_toTopOf="@+id/idSetaInformacoes"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_check_black_24dp" />
+            app:srcCompat="@drawable/uncheck" />
 
         <ImageButton
             android:id="@+id/idSetaInformacoes"

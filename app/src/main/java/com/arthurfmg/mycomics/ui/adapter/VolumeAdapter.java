@@ -45,7 +45,6 @@ public class VolumeAdapter extends RecyclerView.Adapter<VolumeAdapter.MyViewHold
     private VolumeModel volumeModel = new VolumeModel();
     private ComicVineModel comicVineModel = new ComicVineModel();
     private ArrayList<ComicVineModel> listaVineModel = new ArrayList<ComicVineModel>();;
-    private ValueEventListener eventListenerVolume;
     private ChildEventListener childListenerVolume;
 
 

@@ -48,11 +48,6 @@ public class VolumeListActivity extends Activity{
     public final static String VOLUME_ID = "com.arthurfmg.mycomics.VOLUME_ID";
     VolumeModel bestMatch = null;
     private RecyclerView recyclerVolume;
-    private ImageView estrela;
-    private ComicVineModel comicVineModel;
-    private DatabaseReference firebase;
-    private FirebaseAuth autenticacao;
-    private ChildEventListener childListenerVolume;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -61,7 +56,6 @@ public class VolumeListActivity extends Activity{
         setContentView(R.layout.activity_volume_list);
 
         recyclerVolume = findViewById(R.id.idRecycler);
-        estrela = findViewById(R.id.idEstrela);
 
         //define layout
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);

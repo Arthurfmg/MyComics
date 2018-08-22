@@ -1,5 +1,7 @@
 package com.arthurfmg.mycomics.rest.model;
 
+import com.google.firebase.database.Exclude;
+
 /**
  * Created by phesto on 11/18/2016.
  */
@@ -21,6 +23,7 @@ public class ComicVineIssueModel extends ComicVineModel {
         this.issue_number = issue_number;
     }
 
+    @Exclude
     public ComicVineModel getVolume() {
         return volume;
     }
@@ -29,6 +32,7 @@ public class ComicVineIssueModel extends ComicVineModel {
         this.volume = volume;
     }
 
+    @Exclude
     public String getStore_date() {
         return store_date;
     }
@@ -37,6 +41,7 @@ public class ComicVineIssueModel extends ComicVineModel {
         this.store_date = store_date;
     }
 
+    @Exclude
     public ComicVineImageModel getImage() {
         return image;
     }
@@ -45,6 +50,7 @@ public class ComicVineIssueModel extends ComicVineModel {
         this.image = image;
     }
 
+    @Exclude
     public String getDescription() {
         return description;
     }
@@ -53,6 +59,7 @@ public class ComicVineIssueModel extends ComicVineModel {
         this.description = description;
     }
 
+    @Exclude
     public String getCover_date() {
         return cover_date;
     }
