@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,11 +18,15 @@ import com.arthurfmg.mycomics.common.ConfigFirebase;
 import com.arthurfmg.mycomics.rest.model.ComicVineIssueModel;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class IssueAdapter extends RecyclerView.Adapter<IssueAdapter.MyViewHolder> {
 
@@ -31,12 +36,16 @@ public class IssueAdapter extends RecyclerView.Adapter<IssueAdapter.MyViewHolder
     private String textoFormatado = "";
     private FirebaseAuth autenticacao;
     private DatabaseReference firebase;
-    private ChildEventListener childListenerVolume;
+    private ChildEventListener childListenerEdicao;
     private ComicVineIssueModel issueModel = new ComicVineIssueModel();
+    private ArrayList<ComicVineIssueModel> listIssue = new ArrayList();
+    private String volume;
+    private String idEdicao;
 
-    public IssueAdapter(List<ComicVineIssueModel> issue, Context context) {
+    public IssueAdapter(List<ComicVineIssueModel> issue, Context context, String volume) {
         this.issue = issue;
         this.context = context;
+        this.volume = volume;
 
         setHasStableIds(true);
     }
@@ -89,7 +98,7 @@ public class IssueAdapter extends RecyclerView.Adapter<IssueAdapter.MyViewHolder
         holder.informacoes.setText(textoFormatado);
         holder.informacoes.setVisibility(View.GONE);
 
-        //Transforma a seta em um botão fazendo aparecer/desaparecer as informções
+        //Transforma a seta em um botão fazendo aparecer/desaparecer as informações
         holder.seta.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -105,15 +114,14 @@ public class IssueAdapter extends RecyclerView.Adapter<IssueAdapter.MyViewHolder
             }
         });
 
-        final String idVolume = issueModel.getVolume().getId().toString();
-        final String idEdicao = issue.get(position).getId().toString();
+        idEdicao = issueModel.getId().toString();
 
         holder.check.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if(holder.check.getTag().equals("isChecked")){
                     holder.check.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.uncheck));
-                    firebase.child(usuario()).child(idVolume).child(idEdicao).removeValue();
+                    firebase.child(usuario()).child(volume).child(issue.get(position).getId().toString()).removeValue();
                     holder.check.setTag("uncheck");
                     Toast.makeText(context, issue.get(position).getName() + " deletado com sucesso!", Toast.LENGTH_LONG).show();
                 }else {
@@ -124,14 +132,18 @@ public class IssueAdapter extends RecyclerView.Adapter<IssueAdapter.MyViewHolder
                     issueModel.setName(issue.get(position).getName());
                     issueModel.setId(issue.get(position).getId());
 
-                    //salva a revista no Firebase no formato de: colecao - id da revista - id da edição - dados da revista
+                    //salva a revista no Firebase no formato de: usuario - id da revista - id da edição - dados da revista
                     DatabaseReference firebaseSalvaRevista = FirebaseDatabase.getInstance().getReference(usuario());
-                    firebaseSalvaRevista.child(idVolume).child(idEdicao).setValue(issueModel);
+                    firebaseSalvaRevista.child(volume).child(issue.get(position).getId().toString()).setValue(issueModel);
 
                     Toast.makeText(context, issue.get(position).getName() + " está nos favoritos!", Toast.LENGTH_LONG).show();
                 }
             }
         });
+
+        firebase.child(usuario()).child(volume).child(idEdicao);
+        recuperarDados(idEdicao, holder.check);
+        firebase.addChildEventListener(childListenerEdicao);
     }
 
     @Override
@@ -178,5 +190,44 @@ public class IssueAdapter extends RecyclerView.Adapter<IssueAdapter.MyViewHolder
         usuario = Base64Custom.codificarBase64(usuario);
 
         return usuario;
+    }
+
+    public void recuperarDados(final String id, final ImageView check){
+
+        childListenerEdicao = new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                listIssue.clear();
+
+                for(DataSnapshot dados : dataSnapshot.getChildren()) {
+                    Map<String, String> map = (Map) dados.getValue();
+                    if (map.containsKey(id)) {
+                        check.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.check));
+                        check.setTag("isChecked");
+                    }
+                    }
+                IssueAdapter.this.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        };
     }
 }

@@ -49,7 +49,7 @@ public class IssuesListActivity extends AppCompatActivity {
                 Log.d("IComicVineService", "Successfully response fetched");
                 edicao = response.body().getResults();
                 //edicao = new VolumeService().sortBestMatch(textoDefinitivo, volume);
-                IssueAdapter adapter = new IssueAdapter(edicao, IssuesListActivity.this);
+                IssueAdapter adapter = new IssueAdapter(edicao, IssuesListActivity.this, volumeID);
                 recyclerEdicao.setAdapter(adapter);
             }
 
