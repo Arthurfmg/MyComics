@@ -7,9 +7,11 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.arthurfmg.mycomics.R;
 import com.arthurfmg.mycomics.common.Base64Custom;
@@ -37,6 +39,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import static com.arthurfmg.mycomics.MainActivity.SEARCH_MESSAGE;
+import static com.arthurfmg.mycomics.R.drawable.ic_star_border_black_24dp;
 
 /**
  * Created by Arthur on 11/07/2018.
@@ -48,6 +51,11 @@ public class VolumeListActivity extends Activity{
     public final static String VOLUME_ID = "com.arthurfmg.mycomics.VOLUME_ID";
     VolumeModel bestMatch = null;
     private RecyclerView recyclerVolume;
+    private ImageView estrela;
+    private FirebaseAuth autenticacao;
+    private DatabaseReference firebase;
+    private ComicVineModel comicVineModel = new ComicVineModel();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -56,6 +64,8 @@ public class VolumeListActivity extends Activity{
         setContentView(R.layout.activity_volume_list);
 
         recyclerVolume = findViewById(R.id.idRecycler);
+        estrela = findViewById(R.id.idEstrela);
+        firebase = ConfigFirebase.getFirebase();
 
         //define layout
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
@@ -71,32 +81,8 @@ public class VolumeListActivity extends Activity{
                 Log.d("IComicVineService", "Successfully response fetched");
                 volume = response.body().getResults();
                 volume = new VolumeService().sortBestMatch(textoDefinitivo, volume);
-                //ComicVineModelAdapter adapter = new ComicVineModelAdapter(VolumeListActivity.this, volume);
                 VolumeAdapter adapter = new VolumeAdapter(VolumeListActivity.this, volume);
-                //ListView listView = (ListView) findViewById(R.id.volume_list);
-                //listView.setAdapter(adapter);
                 recyclerVolume.setAdapter(adapter);
-
-                recyclerVolume.addOnItemTouchListener(
-                        new RecyclerItemClickListener(getApplicationContext(), recyclerVolume, new RecyclerItemClickListener.OnItemClickListener() {
-                            @Override
-                            public void onItemClick(View view, int position) {
-                                Intent intent = new Intent(VolumeListActivity.this, IssuesListActivity.class);
-                                intent.putExtra(VOLUME_ID, volume.get(position).getId().toString());
-                                startActivity(intent);
-                            }
-
-                            @Override
-                            public void onLongItemClick(View view, int position) {
-
-                            }
-
-                            @Override
-                            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-
-                            }
-                        })
-                );
             }
 
             @Override

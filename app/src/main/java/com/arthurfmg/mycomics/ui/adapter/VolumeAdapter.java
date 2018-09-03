@@ -1,6 +1,7 @@
 package com.arthurfmg.mycomics.ui.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
@@ -18,6 +19,8 @@ import com.arthurfmg.mycomics.common.ConfigFirebase;
 import com.arthurfmg.mycomics.rest.model.ComicVineModel;
 import com.arthurfmg.mycomics.rest.model.UserModel;
 import com.arthurfmg.mycomics.rest.model.VolumeModel;
+import com.arthurfmg.mycomics.ui.activity.IssuesListActivity;
+import com.arthurfmg.mycomics.ui.activity.VolumeListActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -39,6 +42,7 @@ import static com.arthurfmg.mycomics.R.drawable.ic_star_border_black_24dp;
 public class VolumeAdapter extends RecyclerView.Adapter<VolumeAdapter.MyViewHolder>{
 
     private ArrayList<VolumeModel> volume = new ArrayList<>();
+    public final static String VOLUME_ID = "com.arthurfmg.mycomics.VOLUME_ID";
     private Context context;
     private FirebaseAuth autenticacao;
     private DatabaseReference firebase;
@@ -57,7 +61,7 @@ public class VolumeAdapter extends RecyclerView.Adapter<VolumeAdapter.MyViewHold
 
     @NonNull
     @Override
-    public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public MyViewHolder onCreateViewHolder(@NonNull final ViewGroup parent, final int viewType) {
         View itemLista = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_volume, parent, false);
 
         firebase = ConfigFirebase.getFirebase();
@@ -109,6 +113,16 @@ public class VolumeAdapter extends RecyclerView.Adapter<VolumeAdapter.MyViewHold
             }
         });
 
+        //faz o click do item
+        holder.view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, IssuesListActivity.class);
+                intent.putExtra(VOLUME_ID, volume.get(position).getId().toString());
+                context.startActivity(intent);
+            }
+        });
+
         firebase.child(usuario()).child(volumeModel.getId().toString());
         recuperarDados(volumeModel.getId().toString(), holder.estrela);
         firebase.addChildEventListener(childListenerVolume);
@@ -136,6 +150,7 @@ public class VolumeAdapter extends RecyclerView.Adapter<VolumeAdapter.MyViewHold
         private TextView edicoes;
         private TextView editora;
         private ImageView estrela;
+        private View view;
 
         public MyViewHolder(View itemView) {
             super(itemView);
@@ -145,6 +160,7 @@ public class VolumeAdapter extends RecyclerView.Adapter<VolumeAdapter.MyViewHold
             edicoes = itemView.findViewById(R.id.idEdicoes);
             editora = itemView.findViewById(R.id.idEditora);
             estrela = itemView.findViewById(R.id.idEstrela);
+            view = itemView;
         }
     }
 

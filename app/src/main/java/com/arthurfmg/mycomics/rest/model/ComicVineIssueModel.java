@@ -1,12 +1,8 @@
 package com.arthurfmg.mycomics.rest.model;
 
 import com.google.firebase.database.Exclude;
-import com.google.firebase.database.IgnoreExtraProperties;
 import com.google.firebase.database.PropertyName;
 
-/**
- * Created by phesto on 11/18/2016.
- */
 
 public class ComicVineIssueModel{
 

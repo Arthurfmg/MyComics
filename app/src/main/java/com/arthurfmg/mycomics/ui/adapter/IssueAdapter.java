@@ -86,13 +86,17 @@ public class IssueAdapter extends RecyclerView.Adapter<IssueAdapter.MyViewHolder
 
         holder.edicao.setText("Issue #" + issueModel.getIssue_number());
 
-        //Formata o texto das informações para não haver tag HTML
-        textoFormatado = issueModel.getDescription().replaceAll("<.*?>", "");
+        if(textoFormatado != null) {
+            //Formata o texto das informações para não haver tag HTML
+            textoFormatado = issueModel.getDescription().replaceAll("<.*?>", "");
 
-        //Verifica se tem a tabela com lista de capas na descrição e separa ela do texto principal
-        if(textoFormatado.contains("List of covers")){
-            String[] retirarLista = textoFormatado.split("List of covers");
-            textoFormatado = retirarLista[0];
+            //Verifica se tem a tabela com lista de capas na descrição e separa ela do texto principal
+            if (textoFormatado.contains("List of covers")) {
+                String[] retirarLista = textoFormatado.split("List of covers");
+                textoFormatado = retirarLista[0];
+            }
+        }else{
+            textoFormatado = "No Description";
         }
 
         holder.informacoes.setText(textoFormatado);
