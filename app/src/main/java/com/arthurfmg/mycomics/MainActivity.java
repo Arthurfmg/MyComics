@@ -1,14 +1,13 @@
 package com.arthurfmg.mycomics;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
+import android.view.MenuItem;
 import android.support.v7.widget.Toolbar;
 
 import com.arthurfmg.mycomics.common.ConfigFirebase;
@@ -17,12 +16,12 @@ import com.arthurfmg.mycomics.ui.activity.VolumeListActivity;
 import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
 
     public final static String SEARCH_MESSAGE = "com.dledford.mycomics.SEARCH_MESSAGE";
     private FirebaseAuth autenticacao;
-    private Button btnSair;
     private Toolbar toolbar;
+    private RecyclerView recyclerMain;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,35 +34,33 @@ public class MainActivity extends AppCompatActivity {
         toolbar.setTitle("MyComics");
         setSupportActionBar(toolbar);
 
-        btnSair = findViewById(R.id.btnIdSair);
-
-        btnSair.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                deslogarUsuario();
-            }
-        });
-
     }
 
-    @SuppressLint("ResourceType")
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
 
         inflater.inflate(R.menu.menu_main, menu);
 
+        SearchView mSearchView = (SearchView) menu.findItem(R.id.item_pesquisar).getActionView();
+
+        //Define um texto de ajuda:
+        mSearchView.setQueryHint("Pesquisar");
+        mSearchView.setOnQueryTextListener(this);
+
         return true;
     }
 
-    /** Called when the user clicks the Send button */
-    public void comicVineApiSearch(View view) {
-        Intent intent = new Intent(this, VolumeListActivity.class);
-        EditText editText = (EditText) findViewById(R.id.character_search);
-        String searchText = editText.getText().toString();
-        intent.putExtra(SEARCH_MESSAGE, searchText);
-        startActivity(intent);
-        editText.setText("");
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()){
+            case R.id.item_sair:
+                deslogarUsuario();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     public void deslogarUsuario(){
@@ -72,5 +69,20 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(MainActivity.this, LoginActivity.class);
         startActivity(intent);
         finish();
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        Intent intent = new Intent(this, VolumeListActivity.class);
+        intent.putExtra(SEARCH_MESSAGE, query);
+        startActivity(intent);
+        finish();
+
+        return true;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        return false;
     }
 }

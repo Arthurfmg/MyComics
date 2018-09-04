@@ -9,10 +9,10 @@
         android:orderInCategory="100"
         app:showAsAction="never" />
 
-    <item android:id="@+id/item_pesquisa"
+    <item android:id="@+id/item_pesquisar"
         android:title="@string/item_pesquisar"
-        android:orderInCategory="200"
-        app:showAsAction="ifRoom"
-        android:icon="@drawable/ic_search_black_24dp"/>
+        app:showAsAction="collapseActionView|ifRoom"
+        android:icon="@drawable/ic_search_black_24dp"
+        app:actionViewClass="android.support.v7.widget.SearchView" />
 
 </menu>
