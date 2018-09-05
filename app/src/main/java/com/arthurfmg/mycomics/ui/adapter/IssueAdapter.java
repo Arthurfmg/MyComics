@@ -4,9 +4,9 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -32,15 +32,12 @@ public class IssueAdapter extends RecyclerView.Adapter<IssueAdapter.MyViewHolder
 
     private List<ComicVineIssueModel> issue;
     private Context context;
-    private boolean isExpand;
-    private String textoFormatado = "";
-    private FirebaseAuth autenticacao;
+    private boolean isExpand = false;
     private DatabaseReference firebase;
     private ChildEventListener childListenerEdicao;
     private ComicVineIssueModel issueModel = new ComicVineIssueModel();
     private ArrayList<ComicVineIssueModel> listIssue = new ArrayList();
     private String volume;
-    private String idEdicao;
 
     public IssueAdapter(List<ComicVineIssueModel> issue, Context context, String volume) {
         this.issue = issue;
@@ -86,24 +83,19 @@ public class IssueAdapter extends RecyclerView.Adapter<IssueAdapter.MyViewHolder
 
         holder.edicao.setText("Issue #" + issueModel.getIssue_number());
 
-        if(textoFormatado != null) {
-            //Formata o texto das informações para não haver tag HTML
-            textoFormatado = issueModel.getDescription().replaceAll("<.*?>", "");
+        //Formata o texto das informações para não haver tag HTML
+        String textoFormatado = issueModel.getDescription().replaceAll("<.*?>", "");
 
-            //Verifica se tem a tabela com lista de capas na descrição e separa ela do texto principal
-            if (textoFormatado.contains("List of covers")) {
-                String[] retirarLista = textoFormatado.split("List of covers");
-                textoFormatado = retirarLista[0];
-            }
-        }else{
-            textoFormatado = "No Description";
+        //Verifica se tem a tabela com lista de capas na descrição e separa ela do texto principal
+        if (textoFormatado.contains("List of covers")) {
+            String[] retirarLista = textoFormatado.split("List of covers");
+            textoFormatado = retirarLista[0];
         }
 
         holder.informacoes.setText(textoFormatado);
-        holder.informacoes.setVisibility(View.GONE);
 
         //Transforma a seta em um botão fazendo aparecer/desaparecer as informações
-        holder.seta.setOnClickListener(new View.OnClickListener() {
+        holder.seta.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
                 if(isExpand){
@@ -114,13 +106,14 @@ public class IssueAdapter extends RecyclerView.Adapter<IssueAdapter.MyViewHolder
                     holder.seta.animate().rotation(180).start();
                     isExpand = true;
                     holder.informacoes.setVisibility(View.VISIBLE);
+                    holder.informacoes.invalidate();
                 }
             }
         });
 
-        idEdicao = issueModel.getId().toString();
+        String idEdicao = issueModel.getId().toString();
 
-        holder.check.setOnClickListener(new View.OnClickListener() {
+        holder.check.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
                 if(holder.check.getTag().equals("isChecked")){
@@ -188,7 +181,7 @@ public class IssueAdapter extends RecyclerView.Adapter<IssueAdapter.MyViewHolder
     }
 
     public String usuario(){
-        autenticacao = ConfigFirebase.getFirebaseAutenticacao();
+        FirebaseAuth autenticacao = ConfigFirebase.getFirebaseAutenticacao();
         String usuario = autenticacao.getCurrentUser().getEmail().toString();
 
         usuario = Base64Custom.codificarBase64(usuario);

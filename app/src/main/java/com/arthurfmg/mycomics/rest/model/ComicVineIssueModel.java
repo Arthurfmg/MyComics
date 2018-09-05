@@ -11,7 +11,7 @@ public class ComicVineIssueModel{
     @PropertyName("nomeEdicao")
     private String name;
     private ComicVineModel volume;
-    private Integer issue_number;
+    private String issue_number;
     private String store_date;
     private String cover_date;
     private ComicVineImageModel image;
@@ -20,11 +20,11 @@ public class ComicVineIssueModel{
     public ComicVineIssueModel() {
     }
 
-    public Integer getIssue_number() {
+    public String getIssue_number() {
         return issue_number;
     }
 
-    public void setIssue_number(Integer issue_number) {
+    public void setIssue_number(String issue_number) {
         this.issue_number = issue_number;
     }
 
