@@ -12,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.support.v7.widget.Toolbar;
+import android.widget.Toast;
 
 import com.arthurfmg.mycomics.common.Base64Custom;
 import com.arthurfmg.mycomics.common.ConfigFirebase;
@@ -25,6 +26,7 @@ import com.arthurfmg.mycomics.ui.activity.VolumeListActivity;
 import com.arthurfmg.mycomics.ui.adapter.VolumeAdapter;
 import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -43,9 +45,12 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
     private Toolbar toolbar;
     private RecyclerView recyclerMain;
     private DatabaseReference firebase;
-    private ArrayList<Long> listaVolume = new ArrayList<>();
+    private ArrayList<Long> listaVolume = new ArrayList();
     ArrayList<VolumeModel> volume = new ArrayList<>();
     private ValueEventListener eventListenerVolume;
+    private ChildEventListener childListenerVolume;
+    Long idVolume;
+    VolumeAdapter adapter = new VolumeAdapter(MainActivity.this, volume);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,39 +71,59 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
 
         firebase = ConfigFirebase.getFirebase();
         firebase = firebase.child(usuario());
-        RecuperaIdVolume();
-        firebase.addValueEventListener(eventListenerVolume);
+        recuperarIdVolume();
+        //firebase.addValueEventListener(eventListenerVolume);
+        firebase.addChildEventListener(childListenerVolume);
 
-        /*for(int i = 0; i <= listaVolume.size(); i++){
-            new ComicVineService().findVolumeById(listaVolume.get(i)).enqueue(new Callback<ComicVineResult<ArrayList<VolumeModel>>>() {
-                @Override
-                public void onResponse(Call<ComicVineResult<ArrayList<VolumeModel>>> call,
-                                       final Response<ComicVineResult<ArrayList<VolumeModel>>> response) {
-                    Log.d("IComicVineService", "Successfully response fetched");
-                    volume = response.body().getResults();
-                    VolumeAdapter adapter = new VolumeAdapter(MainActivity.this, volume);
-                    recyclerMain.setAdapter(adapter);
-                }
+        if(listaVolume.isEmpty()) {
+            Toast.makeText(MainActivity.this, "Você não tem nada adicionado ainda", Toast.LENGTH_LONG).show();
+        }else {
+            for (int i = 0; i <= listaVolume.size(); i++) {
+                new ComicVineService().findVolumeById(listaVolume.get(i)).enqueue(new Callback<ComicVineResult<ArrayList<VolumeModel>>>() {
+                    @Override
+                    public void onResponse(Call<ComicVineResult<ArrayList<VolumeModel>>> call, final Response<ComicVineResult<ArrayList<VolumeModel>>> response) {
+                        Log.d("IComicVineService", "Successfully response fetched");
+                        volume = response.body().getResults();
+                        VolumeAdapter adapter = new VolumeAdapter(MainActivity.this, volume);
+                        recyclerMain.setAdapter(adapter);
+                    }
 
-                @Override
-                public void onFailure(Call<ComicVineResult<ArrayList<VolumeModel>>> call, Throwable t) {
-                    Log.d("IComicVineService", "Error Occured: " + t.getMessage());
-                }
-            });
-        }*/
+                    @Override
+                    public void onFailure(Call<ComicVineResult<ArrayList<VolumeModel>>> call, Throwable t) {
+                        Log.d("IComicVineService", "Error Occured: " + t.getMessage());
+                    }
+                });
+            }
+        }
 
     }
 
-    public void RecuperaIdVolume(){
-        eventListenerVolume = new ValueEventListener() {
+    public void recuperarIdVolume(){
+        childListenerVolume = new ChildEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 listaVolume.clear();
 
                 for(DataSnapshot dados : dataSnapshot.getChildren()) {
-                    Long idVolume = dados.child("id").getValue(Long.class);
+                    idVolume = dados.child("id").getValue(Long.class);
                     listaVolume.add(idVolume);
                 }
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
             }
 
             @Override
@@ -106,6 +131,28 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
 
             }
         };
+
+        Log.i("listaVolume", "Tamanho: " + listaVolume.size());
+
+        /*eventListenerVolume = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                listaVolume.clear();
+
+                for(DataSnapshot dados : dataSnapshot.getChildren()) {
+                    idVolume = dados.child("id").getValue(Long.class);
+                    listaVolume.add(idVolume);
+                }
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        };*/
+
+
     }
 
     @Override

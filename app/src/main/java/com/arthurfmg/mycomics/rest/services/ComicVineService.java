@@ -41,7 +41,7 @@ public class ComicVineService {
         return comicVineAPI.getVolumeByName(API_KEY, FORMAT, NAME_FILTER + name,getFieldList(VolumeModel.class));
     }
 
-    public Call<ComicVineResult<VolumeModel>> findVolumeById(Long id) {
+    public Call<ComicVineResult<ArrayList<VolumeModel>>> findVolumeById(Long id) {
         IComicVineService comicVineAPI = IComicVineService.retrofit.create(IComicVineService.class);
         return comicVineAPI.getVolumeById(VOLUME_TYPE+"-"+id,API_KEY, FORMAT, getFieldList(VolumeModel.class));
     }

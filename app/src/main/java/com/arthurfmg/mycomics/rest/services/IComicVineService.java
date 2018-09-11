@@ -38,7 +38,7 @@ public interface IComicVineService {
 
     @GET("volumes/{id}")
     @Headers({"User-Agent: Arthurfmg"})
-    Call<ComicVineResult<VolumeModel>> getVolumeById(@Path("id") String id, @Query("api_key") String apiKey,
+    Call<ComicVineResult<ArrayList<VolumeModel>>> getVolumeById(@Path("id") String id, @Query("api_key") String apiKey,
                                                                     @Query("format") String format,@Query("field_list") String fieldList);
 
     @GET("issues")
