@@ -31,6 +31,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 import static com.arthurfmg.mycomics.R.drawable.ic_star_border_black_24dp;
 
@@ -182,13 +183,14 @@ public class VolumeAdapter extends RecyclerView.Adapter<VolumeAdapter.MyViewHold
                 listaVineModel.clear();
 
                 for(DataSnapshot dados : dataSnapshot.getChildren()) {
+                    //Map<String, String> map = (Map) dados.getValue();
                     comicVineModel = dados.getValue(ComicVineModel.class);
                     listaVineModel.add(comicVineModel);
-                    if(comicVineModel.getId().toString().equals(id)){
-                        estrela.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_star_black_24dp));
-                        estrela.setTag("isChecked");
-                    } else {
-                        //estrela.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_star_border_black_24dp));
+                    if(comicVineModel.getId() != null){
+                        if(comicVineModel.getId().toString().equals(id)){
+                            estrela.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_star_black_24dp));
+                            estrela.setTag("isChecked");
+                        }
                     }
                 }
                 VolumeAdapter.this.notifyDataSetChanged();
@@ -214,9 +216,5 @@ public class VolumeAdapter extends RecyclerView.Adapter<VolumeAdapter.MyViewHold
 
             }
         };
-
-        if(listaVineModel.size() < this.getItemCount()){
-            listaVineModel.add(comicVineModel);
-        }
     }
 }

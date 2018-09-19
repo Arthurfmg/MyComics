@@ -43,7 +43,8 @@ public class ComicVineService {
 
     public Call<ComicVineResult<ArrayList<VolumeModel>>> findVolumeById(Long id) {
         IComicVineService comicVineAPI = IComicVineService.retrofit.create(IComicVineService.class);
-        return comicVineAPI.getVolumeById(VOLUME_TYPE+"-"+id,API_KEY, FORMAT, getFieldList(VolumeModel.class));
+        String filter = "id:" + id;
+        return comicVineAPI.getVolumeById(VOLUME_TYPE+"-"+id,API_KEY, FORMAT, filter);
     }
 
     public Call<ComicVineResult<ComicVineCharacterModel>> findCharacterById(Long id) {

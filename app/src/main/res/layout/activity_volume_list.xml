@@ -4,7 +4,7 @@
     android:id="@+id/activity_volume_list"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.dledford.comichoarder.com.arthurfmg.comichoarder.ui.activity.VolumeListActivity">
+    tools:context="com.arthurfmg.mycomics.ui.activity.VolumeListActivity">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/idRecycler"

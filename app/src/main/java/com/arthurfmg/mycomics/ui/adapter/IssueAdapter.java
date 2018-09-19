@@ -38,6 +38,7 @@ public class IssueAdapter extends RecyclerView.Adapter<IssueAdapter.MyViewHolder
     private ComicVineIssueModel issueModel = new ComicVineIssueModel();
     private ArrayList<ComicVineIssueModel> listIssue = new ArrayList();
     private String volume;
+    String textoFormatado;
 
     public IssueAdapter(List<ComicVineIssueModel> issue, Context context, String volume) {
         this.issue = issue;
@@ -83,13 +84,17 @@ public class IssueAdapter extends RecyclerView.Adapter<IssueAdapter.MyViewHolder
 
         holder.edicao.setText("Issue #" + issueModel.getIssue_number());
 
-        //Formata o texto das informações para não haver tag HTML
-        String textoFormatado = issueModel.getDescription().replaceAll("<.*?>", "");
+        if(issueModel.getDescription() != null){
+            //Formata o texto das informações para não haver tag HTML
+            textoFormatado = issueModel.getDescription().replaceAll("<.*?>", "");
 
-        //Verifica se tem a tabela com lista de capas na descrição e separa ela do texto principal
-        if (textoFormatado.contains("List of covers")) {
-            String[] retirarLista = textoFormatado.split("List of covers");
-            textoFormatado = retirarLista[0];
+            //Verifica se tem a tabela com lista de capas na descrição e separa ela do texto principal
+            if (textoFormatado.contains("List of covers")) {
+                String[] retirarLista = textoFormatado.split("List of covers");
+                textoFormatado = retirarLista[0];
+            }
+        } else {
+            textoFormatado = "No Description.";
         }
 
         holder.informacoes.setText(textoFormatado);
@@ -106,7 +111,6 @@ public class IssueAdapter extends RecyclerView.Adapter<IssueAdapter.MyViewHolder
                     holder.seta.animate().rotation(180).start();
                     isExpand = true;
                     holder.informacoes.setVisibility(View.VISIBLE);
-                    holder.informacoes.invalidate();
                 }
             }
         });

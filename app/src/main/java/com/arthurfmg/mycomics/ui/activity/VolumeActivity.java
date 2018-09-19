@@ -35,7 +35,7 @@ public class VolumeActivity extends Activity {
         Intent intent = getIntent();
         final Long id = intent.getLongExtra(VolumeListActivity.VOLUME_ID,0);
 
-        comicVineService.findVolumeById(id).enqueue(new Callback<ComicVineResult<VolumeModel>>() {
+        /*comicVineService.findVolumeById(id).enqueue(new Callback<ComicVineResult<VolumeModel>>() {
             @Override
             public void onResponse(Call<ComicVineResult<VolumeModel>> call,
                                    Response<ComicVineResult<VolumeModel>> response) {
@@ -57,7 +57,7 @@ public class VolumeActivity extends Activity {
             public void onFailure(Call<ComicVineResult<VolumeModel>> call, Throwable t) {
                 Log.d("IComicVineService", "Error Occured: " + t.getMessage());
             }
-        });
+        });*/
 
     }
 }
