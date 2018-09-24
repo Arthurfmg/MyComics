@@ -17,21 +17,17 @@ import com.arthurfmg.mycomics.R;
 import com.arthurfmg.mycomics.common.Base64Custom;
 import com.arthurfmg.mycomics.common.ConfigFirebase;
 import com.arthurfmg.mycomics.rest.model.ComicVineModel;
-import com.arthurfmg.mycomics.rest.model.UserModel;
 import com.arthurfmg.mycomics.rest.model.VolumeModel;
 import com.arthurfmg.mycomics.ui.activity.IssuesListActivity;
-import com.arthurfmg.mycomics.ui.activity.VolumeListActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
-import java.util.Map;
 
 import static com.arthurfmg.mycomics.R.drawable.ic_star_border_black_24dp;
 

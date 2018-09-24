@@ -32,6 +32,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
+import android.support.v7.widget.RecyclerView.LayoutManager;
 
 import java.util.ArrayList;
 
@@ -49,6 +50,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
     private ComicVineModel comicVineModel = new ComicVineModel();
     ArrayList<ComicVineModel> listaVolume = new ArrayList<>();
     ArrayList<VolumeModel> volume = new ArrayList<>();
+    ArrayList<ArrayList<VolumeModel>> arrayVolume = new ArrayList<>();
     VolumeAdapter adapter;
     private ValueEventListener eventListenerVolume;
     private ChildEventListener childListenerVolume;
@@ -69,10 +71,10 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         setSupportActionBar(toolbar);
 
         //define layout
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+        LayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerMain.setLayoutManager(layoutManager);
 
-        adapter = new VolumeAdapter(MainActivity.this, volume);
+
 
         firebase = ConfigFirebase.getFirebase();
         firebase = firebase.child(usuario());
@@ -131,7 +133,10 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
                 for(ComicVineModel lista : listaVolume){
                     gerarAdapter(lista.getId());
                 }
-                //adapter.notifyDataSetChanged();
+
+                if(adapter != null){
+                    adapter.notifyDataSetChanged();
+                }
             }
 
             @Override
@@ -139,7 +144,6 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
 
             }
         };
-
     }
 
     public void gerarAdapter(Long id){
@@ -149,6 +153,8 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
             public void onResponse(Call<ComicVineResult<ArrayList<VolumeModel>>> call, final Response<ComicVineResult<ArrayList<VolumeModel>>> response) {
                 Log.d("IComicVineService", "Successfully response fetched");
                 volume = response.body().getResults();
+                arrayVolume.add(volume);
+                adapter = new VolumeAdapter(MainActivity.this, volume);
                 recyclerMain.setAdapter(adapter);
             }
 
@@ -157,7 +163,6 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
                 Log.d("IComicVineService", "Error Occured: " + t.getMessage());
             }
         });
-        adapter.notifyDataSetChanged();
 
         /*if(listaVolume.isEmpty()) {
             Toast.makeText(MainActivity.this, "Você não tem nada adicionado ainda", Toast.LENGTH_LONG).show();
