@@ -42,7 +42,7 @@ import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
 
-    public final static String SEARCH_MESSAGE = "com.dledford.mycomics.SEARCH_MESSAGE";
+    public final static String SEARCH_MESSAGE = "com.arthurfmg.mycomics.SEARCH_MESSAGE";
     private FirebaseAuth autenticacao;
     private Toolbar toolbar;
     private RecyclerView recyclerMain;
@@ -50,11 +50,8 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
     private ComicVineModel comicVineModel = new ComicVineModel();
     ArrayList<ComicVineModel> listaVolume = new ArrayList<>();
     ArrayList<VolumeModel> volume = new ArrayList<>();
-    ArrayList<ArrayList<VolumeModel>> arrayVolume = new ArrayList<>();
     VolumeAdapter adapter;
     private ValueEventListener eventListenerVolume;
-    private ChildEventListener childListenerVolume;
-    Long idVolume;
 
 
     @Override
@@ -80,45 +77,9 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         firebase = firebase.child(usuario());
         recuperarIdVolume();
         firebase.addValueEventListener(eventListenerVolume);
-        //firebase.addChildEventListener(childListenerVolume);
     }
 
     public void recuperarIdVolume(){
-        /*childListenerVolume = new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                listaVolume.clear();
-
-                for(DataSnapshot dados : dataSnapshot.getChildren()) {
-                    idVolume = dados.child("id").getValue(Long.class);
-                    listaVolume.add(idVolume);
-                }
-                gerarAdapter();
-                adapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        };
-
-        */
 
         eventListenerVolume = new ValueEventListener() {
             @Override
@@ -130,9 +91,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
                     listaVolume.add(comicVineModel);
                 }
 
-                for(ComicVineModel lista : listaVolume){
-                    gerarAdapter(lista.getId());
-                }
+                gerarAdapter();
 
                 if(adapter != null){
                     adapter.notifyDataSetChanged();
@@ -146,35 +105,21 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         };
     }
 
-    public void gerarAdapter(Long id){
-
-        new ComicVineService().findVolumeById(id).enqueue(new Callback<ComicVineResult<ArrayList<VolumeModel>>>() {
-            @Override
-            public void onResponse(Call<ComicVineResult<ArrayList<VolumeModel>>> call, final Response<ComicVineResult<ArrayList<VolumeModel>>> response) {
-                Log.d("IComicVineService", "Successfully response fetched");
-                volume = response.body().getResults();
-                arrayVolume.add(volume);
-                adapter = new VolumeAdapter(MainActivity.this, volume);
-                recyclerMain.setAdapter(adapter);
-            }
-
-            @Override
-            public void onFailure(Call<ComicVineResult<ArrayList<VolumeModel>>> call, Throwable t) {
-                Log.d("IComicVineService", "Error Occured: " + t.getMessage());
-            }
-        });
-
-        /*if(listaVolume.isEmpty()) {
+    public void gerarAdapter(){
+        if(listaVolume.isEmpty()){
             Toast.makeText(MainActivity.this, "Você não tem nada adicionado ainda", Toast.LENGTH_LONG).show();
         }else {
-            for (int i = 0; i < listaVolume.size(); i++) {
-                new ComicVineService().findVolumeById(listaVolume.get(i)).enqueue(new Callback<ComicVineResult<ArrayList<VolumeModel>>>() {
+            for (final ComicVineModel lista : listaVolume) {
+                new ComicVineService().findVolumeById(lista.getId()).enqueue(new Callback<ComicVineResult<ArrayList<VolumeModel>>>() {
                     @Override
                     public void onResponse(Call<ComicVineResult<ArrayList<VolumeModel>>> call, final Response<ComicVineResult<ArrayList<VolumeModel>>> response) {
                         Log.d("IComicVineService", "Successfully response fetched");
-                        volume = response.body().getResults();
-                        VolumeAdapter adapter = new VolumeAdapter(MainActivity.this, volume);
+                        //volume = response.body().getResults();
+                        volume.addAll(response.body().getResults());
+                        adapter = new VolumeAdapter(MainActivity.this, volume);
                         recyclerMain.setAdapter(adapter);
+
+                        adapter.notifyDataSetChanged();
                     }
 
                     @Override
@@ -183,7 +128,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
                     }
                 });
             }
-        }*/
+        }
     }
 
     @Override
