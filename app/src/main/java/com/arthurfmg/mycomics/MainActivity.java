@@ -114,12 +114,11 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
                     @Override
                     public void onResponse(Call<ComicVineResult<ArrayList<VolumeModel>>> call, final Response<ComicVineResult<ArrayList<VolumeModel>>> response) {
                         Log.d("IComicVineService", "Successfully response fetched");
-                        //volume = response.body().getResults();
                         volume.addAll(response.body().getResults());
                         adapter = new VolumeAdapter(MainActivity.this, volume);
                         recyclerMain.setAdapter(adapter);
 
-                        adapter.notifyDataSetChanged();
+                        //adapter.notifyDataSetChanged();
                     }
 
                     @Override

@@ -69,7 +69,6 @@ public class VolumeAdapter extends RecyclerView.Adapter<VolumeAdapter.MyViewHold
     @Override
     public void onBindViewHolder(@NonNull final MyViewHolder holder, final int position) {
         volumeModel = volume.get(position);
-        //Log.i("VolumeModel", "ID do volume: " + volumeModel.getId());
 
         holder.nome.setText(volumeModel.getName());
         Picasso.with(context)
@@ -90,6 +89,7 @@ public class VolumeAdapter extends RecyclerView.Adapter<VolumeAdapter.MyViewHold
                     //Log.i("teste", "Entrei no if!!");
                     firebase.child(usuario()).child(volume.get(position).getId().toString()).removeValue();
                     holder.estrela.setTag("notChecked");
+                    deleteItem(position);
                     Toast.makeText(context, volume.get(position).getName() + " deletado com sucesso!", Toast.LENGTH_LONG).show();
                 }else {
                     holder.estrela.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_star_black_24dp));
@@ -194,12 +194,10 @@ public class VolumeAdapter extends RecyclerView.Adapter<VolumeAdapter.MyViewHold
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
             }
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
-
             }
 
             @Override
@@ -212,5 +210,11 @@ public class VolumeAdapter extends RecyclerView.Adapter<VolumeAdapter.MyViewHold
 
             }
         };
+    }
+
+    void deleteItem(int index) {
+        volume.remove(index);
+        notifyItemRemoved(index);
+        notifyItemRangeChanged(index, volume.size());
     }
 }
