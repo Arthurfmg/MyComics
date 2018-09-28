@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,6 +17,7 @@ import android.widget.Toast;
 import com.arthurfmg.mycomics.R;
 import com.arthurfmg.mycomics.common.Base64Custom;
 import com.arthurfmg.mycomics.common.ConfigFirebase;
+import com.arthurfmg.mycomics.common.VolumeDiffCallback;
 import com.arthurfmg.mycomics.rest.model.ComicVineModel;
 import com.arthurfmg.mycomics.rest.model.VolumeModel;
 import com.arthurfmg.mycomics.ui.activity.IssuesListActivity;
@@ -28,6 +30,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static com.arthurfmg.mycomics.R.drawable.ic_star_border_black_24dp;
 
@@ -89,8 +92,9 @@ public class VolumeAdapter extends RecyclerView.Adapter<VolumeAdapter.MyViewHold
                     //Log.i("teste", "Entrei no if!!");
                     firebase.child(usuario()).child(volume.get(position).getId().toString()).removeValue();
                     holder.estrela.setTag("notChecked");
-                    deleteItem(position);
+                    //deleteItem(position);
                     Toast.makeText(context, volume.get(position).getName() + " deletado com sucesso!", Toast.LENGTH_LONG).show();
+                    updateVolumeItems(volume);
                 }else {
                     holder.estrela.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_star_black_24dp));
                     //cadastraVolumeFirebase(volumeModel.getId(), volumeModel.getName(), volumeModel.getApi_detail_url());
@@ -138,6 +142,15 @@ public class VolumeAdapter extends RecyclerView.Adapter<VolumeAdapter.MyViewHold
     @Override
     public int getItemCount() {
         return volume.size();
+    }
+
+    public void updateVolumeItems(List<VolumeModel> volumes){
+        VolumeDiffCallback diffCallback = new VolumeDiffCallback(this.volume, volumes);
+        DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(diffCallback);
+
+        this.volume.clear();
+        this.volume.addAll(volumes);
+        diffResult.dispatchUpdatesTo(this);
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder{
@@ -189,7 +202,8 @@ public class VolumeAdapter extends RecyclerView.Adapter<VolumeAdapter.MyViewHold
                         }
                     }
                 }
-                VolumeAdapter.this.notifyDataSetChanged();
+                //updateVolumeItems(volume);
+                //VolumeAdapter.this.notifyDataSetChanged();
             }
 
             @Override

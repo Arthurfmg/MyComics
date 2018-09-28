@@ -39,9 +39,23 @@
 
         <activity android:name=".ui.activity.CharacterListActivity" />
         <activity android:name=".ui.activity.CharacterActivity" />
-        <activity android:name=".ui.activity.VolumeListActivity" />
+        <activity
+            android:name=".ui.activity.VolumeListActivity"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity">
+            </meta-data>
+        </activity>
         <activity android:name=".ui.activity.VolumeActivity" />
-        <activity android:name=".ui.activity.IssuesListActivity" />
+        <activity
+            android:name=".ui.activity.IssuesListActivity"
+            android:parentActivityName=".ui.activity.VolumeListActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.activity.VolumeListActivity">
+            </meta-data>
+        </activity>
         <activity android:name=".ui.activity.CadastroActivity" />
         <activity android:name=".MainActivity"></activity>
     </application>

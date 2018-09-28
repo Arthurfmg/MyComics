@@ -178,7 +178,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         Intent intent = new Intent(this, VolumeListActivity.class);
         intent.putExtra(SEARCH_MESSAGE, query);
         startActivity(intent);
-        finish();
+        //finish();
 
         return true;
     }
