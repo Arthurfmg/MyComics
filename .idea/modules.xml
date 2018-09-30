@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/MyComics.iml" filepath="$PROJECT_DIR$/MyComics.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/comic_hoarder-master.iml" filepath="$PROJECT_DIR$/comic_hoarder-master.iml" />
     </modules>
   </component>
 </project>
