@@ -3,10 +3,6 @@ package com.arthurfmg.mycomics.rest.model;
 
 import java.util.ArrayList;
 
-/**
- * Created by phesto on 11/18/2016.
- */
-
 public class ComicVineResult<E>{
 
     private String error;

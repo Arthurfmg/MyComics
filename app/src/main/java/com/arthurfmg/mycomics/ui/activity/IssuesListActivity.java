@@ -26,6 +26,8 @@ public class IssuesListActivity extends AppCompatActivity {
     public final static String EDICAO_ID = "com.dledford.mycomics.EDICAO_ID";
     ComicVineIssueModel bestMatch = null;
     private RecyclerView recyclerEdicao;
+    LinearLayoutManager layoutManager;
+    private ComicVineResult vineResult;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,21 +38,40 @@ public class IssuesListActivity extends AppCompatActivity {
         recyclerEdicao = findViewById(R.id.idRecyclerIssue);
 
         //define layout
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+        layoutManager = new LinearLayoutManager(this);
         recyclerEdicao.setLayoutManager(layoutManager);
 
         Intent intent = getIntent();
-        final String volumeID = intent.getStringExtra(VolumeListActivity.VOLUME_ID).toString();
-        //final String textoDefinitivo = volumeID.replaceAll(" ", "-");
+        final String volumeID = intent.getStringExtra(VolumeListActivity.VOLUME_ID);
+
+        callIssues(volumeID);
+
+    }
+
+    public void callIssues(final String volumeID){
         new ComicVineService().findIssueByVolume(volumeID).enqueue(new Callback<ComicVineResult<ArrayList<ComicVineIssueModel>>>() {
             @Override
-            public void onResponse(Call<ComicVineResult<ArrayList<ComicVineIssueModel>>> call,
-                                   Response<ComicVineResult<ArrayList<ComicVineIssueModel>>> response) {
+            public void onResponse(final Call<ComicVineResult<ArrayList<ComicVineIssueModel>>> call,
+                                   final Response<ComicVineResult<ArrayList<ComicVineIssueModel>>> response) {
                 Log.d("IComicVineService", "Successfully response fetched");
                 edicao = response.body().getResults();
                 //edicao = new VolumeService().sortBestMatch(textoDefinitivo, volume);
-                IssueAdapter adapter = new IssueAdapter(edicao, IssuesListActivity.this, volumeID);
+                final IssueAdapter adapter = new IssueAdapter(edicao, IssuesListActivity.this, volumeID);
                 recyclerEdicao.setAdapter(adapter);
+
+                recyclerEdicao.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                    @Override
+                    public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                        super.onScrolled(recyclerView, dx, dy);
+                        if(edicao.size() == layoutManager.findLastCompletelyVisibleItemPosition() + 1){
+                            Log.d("Tamanho:", "tamanho: " + edicao.size());
+                            //vineResult.setOffset((long) 100);
+                            response.body().setOffset((long) 101);
+                            response.body().getResults();
+                            adapter.notifyDataSetChanged();
+                        }
+                    }
+                });
             }
 
             @Override

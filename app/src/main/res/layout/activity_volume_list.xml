@@ -7,18 +7,6 @@
     android:layout_height="match_parent"
     tools:context="com.arthurfmg.mycomics.ui.activity.VolumeListActivity">
 
-
-    <android.support.design.widget.AppBarLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <include
-            android:id="@+id/toolbar_volume"
-            layout="@layout/toolbar"
-            app:layout_scrollFlags="scroll|enterAlways" />
-
-    </android.support.design.widget.AppBarLayout>
-
     <android.support.v7.widget.RecyclerView
         android:id="@+id/idRecycler"
         android:layout_width="match_parent"
@@ -26,5 +14,14 @@
         android:padding="8dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <include
+            android:id="@+id/toolbar_volume"
+            layout="@layout/toolbar" />
+
+    </android.support.design.widget.AppBarLayout>
 
 </android.support.design.widget.CoordinatorLayout>
