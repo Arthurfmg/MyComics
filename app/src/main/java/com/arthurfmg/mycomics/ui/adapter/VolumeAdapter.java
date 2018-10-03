@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.RecyclerView;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,10 +18,12 @@ import android.widget.Toast;
 import com.arthurfmg.mycomics.R;
 import com.arthurfmg.mycomics.common.Base64Custom;
 import com.arthurfmg.mycomics.common.ConfigFirebase;
+import com.arthurfmg.mycomics.common.FullscreenActivity;
 import com.arthurfmg.mycomics.common.VolumeDiffCallback;
 import com.arthurfmg.mycomics.rest.model.ComicVineModel;
 import com.arthurfmg.mycomics.rest.model.VolumeModel;
 import com.arthurfmg.mycomics.ui.activity.IssuesListActivity;
+import com.github.chrisbanes.photoview.PhotoView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -59,6 +62,10 @@ public class VolumeAdapter extends RecyclerView.Adapter<VolumeAdapter.MyViewHold
         setHasStableIds(true);
     }
 
+    public VolumeAdapter() {
+       setHasStableIds(true);
+    }
+
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull final ViewGroup parent, final int viewType) {
@@ -72,13 +79,25 @@ public class VolumeAdapter extends RecyclerView.Adapter<VolumeAdapter.MyViewHold
     @Override
     public void onBindViewHolder(@NonNull final MyViewHolder holder, final int position) {
         volumeModel = volume.get(position);
+        final DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
 
         holder.nome.setText(volumeModel.getName());
+
         Picasso.with(context)
                 .load(volume.get(position).getImage().getThumb_url())
                 //.placeholder(R.drawable.default_hero)
                 .error(R.drawable.default_hero)
-                .into(holder.imageView);
+                .into(holder.photoView);
+
+        holder.photoView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, FullscreenActivity.class);
+                intent.putExtra("url", volume.get(position).getImage().getMedium_url());
+                context.startActivity(intent);
+            }
+        });
+
         holder.ano.setText(volumeModel.getStart_year());
         holder.edicoes.setText(volumeModel.getCount_of_issues());
         holder.editora.setText(volumeModel.getPublisher().getName());
@@ -161,15 +180,17 @@ public class VolumeAdapter extends RecyclerView.Adapter<VolumeAdapter.MyViewHold
         private TextView editora;
         private ImageView estrela;
         private View view;
+        private PhotoView photoView;
 
         public MyViewHolder(View itemView) {
             super(itemView);
             nome = itemView.findViewById(R.id.idNomeRevista);
-            imageView = itemView.findViewById(R.id.idImagemVolume);
+            //imageView = itemView.findViewById(R.id.idImagemVolume);
             ano = itemView.findViewById(R.id.idAno);
             edicoes = itemView.findViewById(R.id.idEdicoes);
             editora = itemView.findViewById(R.id.idEditora);
             estrela = itemView.findViewById(R.id.idEstrela);
+            photoView = itemView.findViewById(R.id.idImagemVolume);
             view = itemView;
         }
     }
