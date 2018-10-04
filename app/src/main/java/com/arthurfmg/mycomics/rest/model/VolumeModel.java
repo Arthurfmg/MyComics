@@ -1,5 +1,7 @@
 package com.arthurfmg.mycomics.rest.model;
 
+import java.util.Date;
+
 /**
  * Created by Arthur on 29/05/2017.
  */
@@ -8,7 +10,7 @@ public class VolumeModel extends ComicVineModel {
     private ComicVineImageModel image;
     private String count_of_issues;
     private Integer number;
-    private String start_year;
+    private int start_year;
     private Publisher publisher;
 
     public Integer getNumber() {
@@ -35,11 +37,11 @@ public class VolumeModel extends ComicVineModel {
         this.count_of_issues = count_of_issues;
     }
 
-    public String getStart_year() {
+    public int getStart_year() {
         return start_year;
     }
 
-    public void setStart_year(String start_year) {
+    public void setStart_year(int start_year) {
         this.start_year = start_year;
     }
 
@@ -50,4 +52,5 @@ public class VolumeModel extends ComicVineModel {
     public void setPublisher(Publisher publisher) {
         this.publisher = publisher;
     }
+
 }

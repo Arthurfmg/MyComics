@@ -1,9 +1,12 @@
 package com.arthurfmg.mycomics.ui.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
@@ -98,7 +101,7 @@ public class VolumeAdapter extends RecyclerView.Adapter<VolumeAdapter.MyViewHold
             }
         });
 
-        holder.ano.setText(volumeModel.getStart_year());
+        holder.ano.setText(volumeModel.getStart_year() + "");
         holder.edicoes.setText(volumeModel.getCount_of_issues());
         holder.editora.setText(volumeModel.getPublisher().getName());
 

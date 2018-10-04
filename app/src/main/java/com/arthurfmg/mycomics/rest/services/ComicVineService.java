@@ -28,6 +28,7 @@ public class ComicVineService {
     private static final String NAME_FILTER = "name:";
     private static final String VOLUME_FILTER = "volume:";
     private static final String NUMBER_FILTER = "issue_number:";
+    private static final String SORT = "date_last_updated:desc";
     private static final String FILTER_DELIMITER = ",";
 
 
@@ -38,7 +39,7 @@ public class ComicVineService {
 
     public Call<ComicVineResult<ArrayList<VolumeModel>>> findVolumeByName(String name) {
         IComicVineService comicVineAPI = IComicVineService.retrofit.create(IComicVineService.class);
-        return comicVineAPI.getVolumeByName(API_KEY, FORMAT, NAME_FILTER + name,getFieldList(VolumeModel.class));
+        return comicVineAPI.getVolumeByName(API_KEY, FORMAT, NAME_FILTER + name,getFieldList(VolumeModel.class), SORT);
     }
 
     public Call<ComicVineResult<ArrayList<VolumeModel>>> findVolumeById(Long id) {

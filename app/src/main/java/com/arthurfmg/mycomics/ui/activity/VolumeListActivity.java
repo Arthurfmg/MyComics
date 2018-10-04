@@ -18,6 +18,8 @@ import com.arthurfmg.mycomics.services.VolumeService;
 import com.arthurfmg.mycomics.ui.adapter.VolumeAdapter;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -66,6 +68,16 @@ public class VolumeListActivity extends AppCompatActivity{
                 Log.d("IComicVineService", "Successfully response fetched");
                 volume = response.body().getResults();
                 volume = new VolumeService().sortBestMatch(textoDefinitivo, volume);
+
+                /*Collections.sort(volume, new Comparator<VolumeModel>() {
+                    @Override
+                    public int compare(VolumeModel volumeModel, VolumeModel t1) {
+                        if(volumeModel.getStart_year() < t1.getStart_year()) return +1;
+                        else if(volumeModel.getStart_year() > t1.getStart_year()) return -1;
+                        else return 0;
+                    }
+                });*/
+
                 VolumeAdapter adapter = new VolumeAdapter(VolumeListActivity.this, volume);
                 recyclerVolume.setAdapter(adapter);
             }

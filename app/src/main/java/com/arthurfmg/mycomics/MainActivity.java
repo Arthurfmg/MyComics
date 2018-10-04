@@ -35,6 +35,8 @@ import com.google.firebase.database.ValueEventListener;
 import android.support.v7.widget.RecyclerView.LayoutManager;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -64,7 +66,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         recyclerMain = findViewById(R.id.idRecyclerMain);
 
         toolbar = findViewById(R.id.toolbar);
-        toolbar.setTitle("MyComics");
+        toolbar.setTitle("Minha Coleção");
         setSupportActionBar(toolbar);
 
         //define layout
@@ -115,6 +117,14 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
                     public void onResponse(Call<ComicVineResult<ArrayList<VolumeModel>>> call, final Response<ComicVineResult<ArrayList<VolumeModel>>> response) {
                         Log.d("IComicVineService", "Successfully response fetched");
                         volume.addAll(response.body().getResults());
+
+                        Collections.sort(volume, new Comparator<VolumeModel>() {
+                            @Override
+                            public int compare(VolumeModel volumeModel, VolumeModel t1) {
+                                return volumeModel.getName().compareTo(t1.getName());
+                            }
+                        });
+
                         adapter = new VolumeAdapter(MainActivity.this, volume);
                         recyclerMain.setAdapter(adapter);
 
