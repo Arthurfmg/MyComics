@@ -12,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
 import android.widget.Toast;
 
 import com.arthurfmg.mycomics.common.Base64Custom;
@@ -127,6 +128,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
 
                         adapter = new VolumeAdapter(MainActivity.this, volume);
                         recyclerMain.setAdapter(adapter);
+                        findViewById(R.id.idLoading).setVisibility(View.GONE);
 
                         //adapter.notifyDataSetChanged();
                     }

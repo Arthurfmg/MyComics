@@ -1,6 +1,5 @@
 package com.arthurfmg.mycomics.rest.services;
 
-import com.arthurfmg.mycomics.rest.model.ComicVineCharacterModel;
 import com.arthurfmg.mycomics.rest.model.ComicVineIssueModel;
 import com.arthurfmg.mycomics.rest.model.ComicVineResult;
 import com.arthurfmg.mycomics.rest.model.VolumeModel;
@@ -18,18 +17,9 @@ import retrofit2.http.Headers;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
-/**
- * Created by phesto on 11/18/2016.
- */
-
 public interface IComicVineService {
 
     final String BASE_URL = "http://www.comicvine.com/api/";
-
-    @GET("characters")
-    @Headers({"User-Agent: dledford"})
-    Call<ComicVineResult<ArrayList<ComicVineCharacterModel>>> getCharacterByName(@Query("api_key") String apiKey, @Query("format") String format,
-                                                                                 @Query("filter") String filter,@Query("field_list") String fieldList);
 
     @GET("volumes")
     @Headers({"User-Agent: Arthurfmg"})
@@ -44,7 +34,7 @@ public interface IComicVineService {
 
     @GET("issues")
     @Headers({"User-Agent: Arthurfmg"})
-    Call<ComicVineResult<ArrayList<ComicVineCharacterModel>>> getIssueByNameAndNumber(@Query("api_key") String apiKey, @Query("format") String format,
+    Call<ComicVineResult<ArrayList<ComicVineIssueModel>>> getIssueByNameAndNumber(@Query("api_key") String apiKey, @Query("format") String format,
                                                                                       @Query("filter") String filter);
 
     @GET("issues")
@@ -52,20 +42,12 @@ public interface IComicVineService {
     Call<ComicVineResult<ArrayList<ComicVineIssueModel>>> getIssueByVolume(@Query("api_key") String apiKey, @Query("format") String format,
                                                                                       @Query("filter") String filter);
 
-    @GET("series_list")
-    @Headers({"User-Agent: dledford"})
-    Call<ComicVineResult<ArrayList<ComicVineCharacterModel>>> getSeriesByName(@Query("api_key") String apiKey, @Query("format") String format,
-                                                                              @Query("filter") String filter);
 
     @GET("issue/{id}")
     @Headers({"User-Agent: Arthurfmg"})
     Call<ComicVineResult<ComicVineIssueModel>> getIssueById(@Path("id") String id, @Query("api_key") String apiKey,
                                                                 @Query("format") String format);
 
-    @GET("character/{id}")
-    @Headers({"User-Agent: dledford"})
-    Call<ComicVineResult<ComicVineCharacterModel>> getCharacterById(@Path("id") String id, @Query("api_key") String apiKey,
-                                                                    @Query("format") String format,@Query("field_list") String fieldList);
 
     public static final Retrofit retrofit = new Retrofit.Builder()
             .baseUrl(BASE_URL)

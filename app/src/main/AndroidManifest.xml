@@ -42,8 +42,6 @@
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.activity.CharacterListActivity" />
-        <activity android:name=".ui.activity.CharacterActivity" />
         <activity
             android:name=".ui.activity.VolumeListActivity"
             android:parentActivityName=".MainActivity">
@@ -51,7 +49,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity"></meta-data>
         </activity>
-        <activity android:name=".ui.activity.VolumeActivity" />
         <activity
             android:name=".ui.activity.IssuesListActivity"
             android:parentActivityName=".ui.activity.VolumeListActivity">

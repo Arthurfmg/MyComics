@@ -12,10 +12,6 @@ import java.lang.ref.WeakReference;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-/**
- * Created by phesto on 1/11/2017.
- */
-
 public class RemoteImageTask extends AsyncTask<String, Void, Bitmap> {
 
     private final WeakReference<ImageView> imageViewReference;

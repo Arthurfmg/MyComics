@@ -8,6 +8,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.View;
 
 import com.arthurfmg.mycomics.R;
 import com.arthurfmg.mycomics.common.ExceptionHandler;
@@ -69,17 +70,10 @@ public class VolumeListActivity extends AppCompatActivity{
                 volume = response.body().getResults();
                 volume = new VolumeService().sortBestMatch(textoDefinitivo, volume);
 
-                /*Collections.sort(volume, new Comparator<VolumeModel>() {
-                    @Override
-                    public int compare(VolumeModel volumeModel, VolumeModel t1) {
-                        if(volumeModel.getStart_year() < t1.getStart_year()) return +1;
-                        else if(volumeModel.getStart_year() > t1.getStart_year()) return -1;
-                        else return 0;
-                    }
-                });*/
-
                 VolumeAdapter adapter = new VolumeAdapter(VolumeListActivity.this, volume);
                 recyclerVolume.setAdapter(adapter);
+
+                findViewById(R.id.idLoadingVolume).setVisibility(View.GONE);
             }
 
             @Override

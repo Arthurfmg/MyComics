@@ -9,9 +9,6 @@ import com.arthurfmg.mycomics.ui.activity.ErrorActivity;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
-/**
- * Created by phesto on 1/11/2017.
- */
 public class ExceptionHandler implements
         java.lang.Thread.UncaughtExceptionHandler {
     private final Activity myContext;

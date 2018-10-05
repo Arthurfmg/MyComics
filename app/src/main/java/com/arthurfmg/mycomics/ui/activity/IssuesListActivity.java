@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
 
 import com.arthurfmg.mycomics.R;
 import com.arthurfmg.mycomics.common.ExceptionHandler;
@@ -58,6 +59,7 @@ public class IssuesListActivity extends AppCompatActivity {
                 //edicao = new VolumeService().sortBestMatch(textoDefinitivo, volume);
                 final IssueAdapter adapter = new IssueAdapter(edicao, IssuesListActivity.this, volumeID);
                 recyclerEdicao.setAdapter(adapter);
+                findViewById(R.id.idLoadingIssue).setVisibility(View.GONE);
 
                 recyclerEdicao.addOnScrollListener(new RecyclerView.OnScrollListener() {
                     @Override

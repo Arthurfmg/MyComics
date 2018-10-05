@@ -25,6 +25,12 @@
             layout="@layout/toolbar" />
     </android.support.design.widget.AppBarLayout>
 
-
+    <ProgressBar
+        android:id="@+id/idLoadingIssue"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:indeterminate="true"
+        android:layout_gravity="center_horizontal|center_vertical"/>
 
 </android.support.design.widget.CoordinatorLayout>
