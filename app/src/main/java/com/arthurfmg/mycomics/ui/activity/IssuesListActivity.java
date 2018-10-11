@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 
@@ -14,6 +15,7 @@ import com.arthurfmg.mycomics.rest.model.ComicVineIssueModel;
 import com.arthurfmg.mycomics.rest.model.ComicVineResult;
 import com.arthurfmg.mycomics.rest.services.ComicVineService;
 import com.arthurfmg.mycomics.ui.adapter.IssueAdapter;
+import com.arthurfmg.mycomics.ui.adapter.VolumeAdapter;
 
 import java.util.ArrayList;
 
@@ -24,11 +26,10 @@ import retrofit2.Response;
 public class IssuesListActivity extends AppCompatActivity {
 
     ArrayList<ComicVineIssueModel> edicao = new ArrayList<>();
-    public final static String EDICAO_ID = "com.dledford.mycomics.EDICAO_ID";
-    ComicVineIssueModel bestMatch = null;
+    public final static String EDICAO_ID = "com.arthurfmg.mycomics.EDICAO_ID";
     private RecyclerView recyclerEdicao;
     LinearLayoutManager layoutManager;
-    private ComicVineResult vineResult;
+    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +38,7 @@ public class IssuesListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_issues_list);
 
         recyclerEdicao = findViewById(R.id.idRecyclerIssue);
+        toolbar = findViewById(R.id.toolbar_issues);
 
         //define layout
         layoutManager = new LinearLayoutManager(this);
@@ -44,12 +46,12 @@ public class IssuesListActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         final String volumeID = intent.getStringExtra(VolumeListActivity.VOLUME_ID);
+        String volumeName = intent.getStringExtra(VolumeListActivity.VOLUME_NAME);
 
-        callIssues(volumeID);
+        toolbar.setTitle(volumeName.toUpperCase());
+        toolbar.setNavigationIcon(R.drawable.arrow_back);
+        setSupportActionBar(toolbar);
 
-    }
-
-    public void callIssues(final String volumeID){
         new ComicVineService().findIssueByVolume(volumeID).enqueue(new Callback<ComicVineResult<ArrayList<ComicVineIssueModel>>>() {
             @Override
             public void onResponse(final Call<ComicVineResult<ArrayList<ComicVineIssueModel>>> call,
@@ -59,21 +61,10 @@ public class IssuesListActivity extends AppCompatActivity {
                 //edicao = new VolumeService().sortBestMatch(textoDefinitivo, volume);
                 final IssueAdapter adapter = new IssueAdapter(edicao, IssuesListActivity.this, volumeID);
                 recyclerEdicao.setAdapter(adapter);
-                findViewById(R.id.idLoadingIssue).setVisibility(View.GONE);
 
-                recyclerEdicao.addOnScrollListener(new RecyclerView.OnScrollListener() {
-                    @Override
-                    public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                        super.onScrolled(recyclerView, dx, dy);
-                        if(edicao.size() == layoutManager.findLastCompletelyVisibleItemPosition() + 1){
-                            Log.d("Tamanho:", "tamanho: " + edicao.size());
-                            //vineResult.setOffset((long) 100);
-                            response.body().setOffset((long) 101);
-                            response.body().getResults();
-                            adapter.notifyDataSetChanged();
-                        }
-                    }
-                });
+                //adapter.notifyDataSetChanged();
+
+                findViewById(R.id.idLoadingIssue).setVisibility(View.GONE);
             }
 
             @Override

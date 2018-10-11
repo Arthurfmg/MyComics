@@ -39,6 +39,7 @@ public class IssueAdapter extends RecyclerView.Adapter<IssueAdapter.MyViewHolder
     private ArrayList<ComicVineIssueModel> listIssue = new ArrayList();
     private String volume;
     String textoFormatado;
+    Map<String, String> map;
 
     public IssueAdapter(List<ComicVineIssueModel> issue, Context context, String volume) {
         this.issue = issue;
@@ -198,16 +199,21 @@ public class IssueAdapter extends RecyclerView.Adapter<IssueAdapter.MyViewHolder
         childListenerEdicao = new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                listIssue.clear();
+                //listIssue.clear();
+                if(map != null) {
+                    map.clear();
+                }
 
                 for(DataSnapshot dados : dataSnapshot.getChildren()) {
-                    Map<String, String> map = (Map) dados.getValue();
-                    if (map.containsKey(id)) {
-                        check.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.check));
-                        check.setTag("isChecked");
+                    map = (Map) dados.getValue();
+                    if(map != null) {
+                        if (map.containsKey(id)) {
+                            check.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.check));
+                            check.setTag("isChecked");
+                        }
                     }
-                    }
-                IssueAdapter.this.notifyDataSetChanged();
+                }
+                //IssueAdapter.this.notifyDataSetChanged();
             }
 
             @Override

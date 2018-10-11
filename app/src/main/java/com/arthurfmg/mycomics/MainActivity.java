@@ -1,7 +1,8 @@
 package com.arthurfmg.mycomics;
 
 import android.content.Intent;
-import android.support.v4.content.ContextCompat;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -22,7 +23,6 @@ import com.arthurfmg.mycomics.rest.model.ComicVineModel;
 import com.arthurfmg.mycomics.rest.model.ComicVineResult;
 import com.arthurfmg.mycomics.rest.model.VolumeModel;
 import com.arthurfmg.mycomics.rest.services.ComicVineService;
-import com.arthurfmg.mycomics.services.VolumeService;
 import com.arthurfmg.mycomics.ui.activity.LoginActivity;
 import com.arthurfmg.mycomics.ui.activity.VolumeListActivity;
 import com.arthurfmg.mycomics.ui.adapter.VolumeAdapter;
@@ -55,6 +55,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
     ArrayList<VolumeModel> volume = new ArrayList<>();
     VolumeAdapter adapter;
     private ValueEventListener eventListenerVolume;
+    private ChildEventListener childEventListener;
 
 
     @Override
@@ -77,14 +78,55 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
 
 
         firebase = ConfigFirebase.getFirebase();
-        firebase = firebase.child(usuario());
+        //firebase = firebase.child(usuario());
         recuperarIdVolume();
-        firebase.addValueEventListener(eventListenerVolume);
+        firebase.addChildEventListener(childEventListener);
+        //firebase.addListenerForSingleValueEvent(eventListenerVolume);
     }
 
     public void recuperarIdVolume(){
 
-        eventListenerVolume = new ValueEventListener() {
+        childEventListener = new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                listaVolume.clear();
+
+                for(DataSnapshot dados : dataSnapshot.getChildren()) {
+                    comicVineModel = dados.getValue(ComicVineModel.class);
+                    listaVolume.add(comicVineModel);
+                }
+
+                gerarAdapter();
+
+                if(adapter != null){
+                    adapter.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        };
+
+
+
+        /*eventListenerVolume = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 listaVolume.clear();
@@ -105,7 +147,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
             public void onCancelled(DatabaseError databaseError) {
 
             }
-        };
+        };*/
     }
 
     public void gerarAdapter(){
@@ -129,6 +171,8 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
                         adapter = new VolumeAdapter(MainActivity.this, volume);
                         recyclerMain.setAdapter(adapter);
                         findViewById(R.id.idLoading).setVisibility(View.GONE);
+
+                        //adapter.updateVolumeItems(volume);
 
                         //adapter.notifyDataSetChanged();
                     }

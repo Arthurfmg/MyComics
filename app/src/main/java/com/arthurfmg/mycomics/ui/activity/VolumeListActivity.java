@@ -36,6 +36,7 @@ import static com.arthurfmg.mycomics.MainActivity.SEARCH_MESSAGE;
 public class VolumeListActivity extends AppCompatActivity{
     ArrayList<VolumeModel> volume = new ArrayList<>();
     public final static String VOLUME_ID = "com.arthurfmg.mycomics.VOLUME_ID";
+    public final static String VOLUME_NAME = "com.arthurfmg.mycomics.VOLUME_NAME";
     VolumeModel bestMatch = null;
     private RecyclerView recyclerVolume;
     private Toolbar toolbar;
@@ -72,6 +73,8 @@ public class VolumeListActivity extends AppCompatActivity{
 
                 VolumeAdapter adapter = new VolumeAdapter(VolumeListActivity.this, volume);
                 recyclerVolume.setAdapter(adapter);
+
+                //adapter.notifyDataSetChanged();
 
                 findViewById(R.id.idLoadingVolume).setVisibility(View.GONE);
             }

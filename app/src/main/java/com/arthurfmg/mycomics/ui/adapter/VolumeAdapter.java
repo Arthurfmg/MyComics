@@ -1,16 +1,11 @@
 package com.arthurfmg.mycomics.ui.adapter;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.view.ViewCompat;
 import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.RecyclerView;
-import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,6 +44,7 @@ public class VolumeAdapter extends RecyclerView.Adapter<VolumeAdapter.MyViewHold
 
     private ArrayList<VolumeModel> volume = new ArrayList<>();
     public final static String VOLUME_ID = "com.arthurfmg.mycomics.VOLUME_ID";
+    public final static String VOLUME_NAME = "com.arthurfmg.mycomics.VOLUME_NAME";
     private Context context;
     private FirebaseAuth autenticacao;
     private DatabaseReference firebase;
@@ -65,10 +61,6 @@ public class VolumeAdapter extends RecyclerView.Adapter<VolumeAdapter.MyViewHold
         setHasStableIds(true);
     }
 
-    public VolumeAdapter() {
-       setHasStableIds(true);
-    }
-
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull final ViewGroup parent, final int viewType) {
@@ -82,7 +74,6 @@ public class VolumeAdapter extends RecyclerView.Adapter<VolumeAdapter.MyViewHold
     @Override
     public void onBindViewHolder(@NonNull final MyViewHolder holder, final int position) {
         volumeModel = volume.get(position);
-        final DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
 
         holder.nome.setText(volumeModel.getName());
 
@@ -111,11 +102,11 @@ public class VolumeAdapter extends RecyclerView.Adapter<VolumeAdapter.MyViewHold
             public void onClick(View view) {
                 if(holder.estrela.getTag().equals("isChecked")){
                     holder.estrela.setImageDrawable(ContextCompat.getDrawable(context, ic_star_border_black_24dp));
-                    //Log.i("teste", "Entrei no if!!");
+
                     firebase.child(usuario()).child(volume.get(position).getId().toString()).removeValue();
                     holder.estrela.setTag("notChecked");
-                    //deleteItem(position);
                     Toast.makeText(context, volume.get(position).getName() + " deletado com sucesso!", Toast.LENGTH_LONG).show();
+
                     updateVolumeItems(volume);
                 }else {
                     holder.estrela.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_star_black_24dp));
@@ -142,6 +133,7 @@ public class VolumeAdapter extends RecyclerView.Adapter<VolumeAdapter.MyViewHold
             public void onClick(View view) {
                 Intent intent = new Intent(context, IssuesListActivity.class);
                 intent.putExtra(VOLUME_ID, volume.get(position).getId().toString());
+                intent.putExtra(VOLUME_NAME, volume.get(position).getName());
                 context.startActivity(intent);
             }
         });
@@ -170,8 +162,8 @@ public class VolumeAdapter extends RecyclerView.Adapter<VolumeAdapter.MyViewHold
         VolumeDiffCallback diffCallback = new VolumeDiffCallback(this.volume, volumes);
         DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(diffCallback);
 
-        this.volume.clear();
-        this.volume.addAll(volumes);
+        //this.volume.clear();
+        //this.volume.addAll(volumes);
         diffResult.dispatchUpdatesTo(this);
     }
 
@@ -226,8 +218,8 @@ public class VolumeAdapter extends RecyclerView.Adapter<VolumeAdapter.MyViewHold
                         }
                     }
                 }
-                //updateVolumeItems(volume);
-                //VolumeAdapter.this.notifyDataSetChanged();
+                //updateVineItems(listaVineModel);
+                VolumeAdapter.this.notifyDataSetChanged();
             }
 
             @Override
@@ -248,11 +240,5 @@ public class VolumeAdapter extends RecyclerView.Adapter<VolumeAdapter.MyViewHold
 
             }
         };
-    }
-
-    void deleteItem(int index) {
-        volume.remove(index);
-        notifyItemRemoved(index);
-        notifyItemRangeChanged(index, volume.size());
     }
 }
