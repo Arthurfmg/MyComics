@@ -162,8 +162,9 @@ public class VolumeAdapter extends RecyclerView.Adapter<VolumeAdapter.MyViewHold
         VolumeDiffCallback diffCallback = new VolumeDiffCallback(this.volume, volumes);
         DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(diffCallback);
 
-        //this.volume.clear();
-        //this.volume.addAll(volumes);
+        this.volume.clear();
+        this.notifyDataSetChanged();
+        this.volume.addAll(volumes);
         diffResult.dispatchUpdatesTo(this);
     }
 
@@ -219,7 +220,7 @@ public class VolumeAdapter extends RecyclerView.Adapter<VolumeAdapter.MyViewHold
                     }
                 }
                 //updateVineItems(listaVineModel);
-                VolumeAdapter.this.notifyDataSetChanged();
+                //VolumeAdapter.this.notifyDataSetChanged();
             }
 
             @Override

@@ -52,11 +52,21 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
     private DatabaseReference firebase;
     private ComicVineModel comicVineModel = new ComicVineModel();
     ArrayList<ComicVineModel> listaVolume = new ArrayList<>();
-    ArrayList<VolumeModel> volume = new ArrayList<>();
+    ArrayList<VolumeModel> volume;
     VolumeAdapter adapter;
     private ValueEventListener eventListenerVolume;
     private ChildEventListener childEventListener;
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        firebase.removeEventListener(eventListenerVolume);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +76,8 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
 
         autenticacao = ConfigFirebase.getFirebaseAutenticacao();
         recyclerMain = findViewById(R.id.idRecyclerMain);
+
+        volume = new ArrayList<>();
 
         toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle("Minha Coleção");
@@ -78,17 +90,49 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
 
 
         firebase = ConfigFirebase.getFirebase();
-        //firebase = firebase.child(usuario());
+        firebase = firebase.child(usuario());
         recuperarIdVolume();
-        firebase.addChildEventListener(childEventListener);
+
+        firebase.removeEventListener(eventListenerVolume);
+
+        //firebase.addChildEventListener(childEventListener);
         //firebase.addListenerForSingleValueEvent(eventListenerVolume);
+        firebase.addValueEventListener(eventListenerVolume);
     }
 
     public void recuperarIdVolume(){
 
-        childEventListener = new ChildEventListener() {
+        /*childEventListener = new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                if(listaVolume != null && listaVolume.size() > 0) {
+                    listaVolume.clear();
+                }
+
+                for(DataSnapshot dados : dataSnapshot.getChildren()) {
+                    comicVineModel = dados.getValue(ComicVineModel.class);
+                    listaVolume.add(comicVineModel);
+                }
+
+                gerarAdapter();
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                if(listaVolume != null && listaVolume.size() > 0) {
+                    listaVolume.clear();
+                }
+
+                for(DataSnapshot dados : dataSnapshot.getChildren()) {
+                    comicVineModel = dados.getValue(ComicVineModel.class);
+                    listaVolume.add(comicVineModel);
+                }
+
+                gerarAdapter();
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
                 listaVolume.clear();
 
                 for(DataSnapshot dados : dataSnapshot.getChildren()) {
@@ -99,18 +143,8 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
                 gerarAdapter();
 
                 if(adapter != null){
-                    adapter.notifyDataSetChanged();
+                    //adapter.notifyDataSetChanged();
                 }
-            }
-
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-
             }
 
             @Override
@@ -122,11 +156,11 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
             }
-        };
+        };*/
 
 
 
-        /*eventListenerVolume = new ValueEventListener() {
+        eventListenerVolume = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 listaVolume.clear();
@@ -139,7 +173,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
                 gerarAdapter();
 
                 if(adapter != null){
-                    adapter.notifyDataSetChanged();
+                    //adapter.notifyDataSetChanged();
                 }
             }
 
@@ -147,11 +181,12 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
             public void onCancelled(DatabaseError databaseError) {
 
             }
-        };*/
+        };
     }
 
     public void gerarAdapter(){
         if(listaVolume.isEmpty()){
+            findViewById(R.id.idLoading).setVisibility(View.GONE);
             Toast.makeText(MainActivity.this, "Você não tem nada adicionado ainda", Toast.LENGTH_LONG).show();
         }else {
             for (final ComicVineModel lista : listaVolume) {
