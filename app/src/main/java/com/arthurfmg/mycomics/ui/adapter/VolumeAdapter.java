@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.arthurfmg.mycomics.MainActivity;
 import com.arthurfmg.mycomics.R;
 import com.arthurfmg.mycomics.common.Base64Custom;
 import com.arthurfmg.mycomics.common.ConfigFirebase;
@@ -107,7 +108,10 @@ public class VolumeAdapter extends RecyclerView.Adapter<VolumeAdapter.MyViewHold
                     holder.estrela.setTag("notChecked");
                     Toast.makeText(context, volume.get(position).getName() + " deletado com sucesso!", Toast.LENGTH_LONG).show();
 
-                    updateVolumeItems(volume);
+                    //verifica se foi a MainActivity que chamou para não travar a lista
+                    if(context instanceof MainActivity) {
+                        updateVolumeItems(volume);
+                    }
                 }else {
                     holder.estrela.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_star_black_24dp));
                     //cadastraVolumeFirebase(volumeModel.getId(), volumeModel.getName(), volumeModel.getApi_detail_url());

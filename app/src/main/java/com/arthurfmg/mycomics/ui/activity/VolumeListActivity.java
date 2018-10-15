@@ -10,6 +10,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 
+import com.arthurfmg.mycomics.MainActivity;
 import com.arthurfmg.mycomics.R;
 import com.arthurfmg.mycomics.common.ExceptionHandler;
 import com.arthurfmg.mycomics.rest.model.ComicVineResult;
@@ -84,6 +85,13 @@ public class VolumeListActivity extends AppCompatActivity{
                 Log.d("IComicVineService", "Error Occured: " + t.getMessage());
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent intent = new Intent(this, MainActivity.class);
+        this.startActivity(intent);
     }
 }
 
