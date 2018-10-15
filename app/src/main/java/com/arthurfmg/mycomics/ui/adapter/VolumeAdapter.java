@@ -223,8 +223,6 @@ public class VolumeAdapter extends RecyclerView.Adapter<VolumeAdapter.MyViewHold
                         }
                     }
                 }
-                //updateVineItems(listaVineModel);
-                //VolumeAdapter.this.notifyDataSetChanged();
             }
 
             @Override

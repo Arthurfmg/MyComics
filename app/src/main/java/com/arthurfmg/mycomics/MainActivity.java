@@ -55,24 +55,6 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
     ArrayList<VolumeModel> volume;
     VolumeAdapter adapter;
     private ValueEventListener eventListenerVolume;
-    private ChildEventListener childEventListener;
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        firebase.removeEventListener(eventListenerVolume);
-    }
-
-    @Override
-    protected void onRestart() {
-        super.onRestart();
-        firebase.addValueEventListener(eventListenerVolume);
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,78 +75,16 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         LayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerMain.setLayoutManager(layoutManager);
 
-
-
         firebase = ConfigFirebase.getFirebase();
         firebase = firebase.child(usuario());
         recuperarIdVolume();
 
         firebase.removeEventListener(eventListenerVolume);
 
-        //firebase.addChildEventListener(childEventListener);
-        //firebase.addListenerForSingleValueEvent(eventListenerVolume);
         firebase.addValueEventListener(eventListenerVolume);
     }
 
     public void recuperarIdVolume(){
-
-        /*childEventListener = new ChildEventListener() {
-            @Override
-            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                if(listaVolume != null && listaVolume.size() > 0) {
-                    listaVolume.clear();
-                }
-
-                for(DataSnapshot dados : dataSnapshot.getChildren()) {
-                    comicVineModel = dados.getValue(ComicVineModel.class);
-                    listaVolume.add(comicVineModel);
-                }
-
-                gerarAdapter();
-            }
-
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                if(listaVolume != null && listaVolume.size() > 0) {
-                    listaVolume.clear();
-                }
-
-                for(DataSnapshot dados : dataSnapshot.getChildren()) {
-                    comicVineModel = dados.getValue(ComicVineModel.class);
-                    listaVolume.add(comicVineModel);
-                }
-
-                gerarAdapter();
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-                listaVolume.clear();
-
-                for(DataSnapshot dados : dataSnapshot.getChildren()) {
-                    comicVineModel = dados.getValue(ComicVineModel.class);
-                    listaVolume.add(comicVineModel);
-                }
-
-                gerarAdapter();
-
-                if(adapter != null){
-                    //adapter.notifyDataSetChanged();
-                }
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        };*/
-
-
 
         eventListenerVolume = new ValueEventListener() {
             @Override
@@ -177,15 +97,12 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
                 }
 
                 gerarAdapter();
-
-                if(adapter != null){
-                    //adapter.notifyDataSetChanged();
-                }
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
+                Toast.makeText(MainActivity.this, "Erro no banco de dados" + databaseError.getDetails(),
+                        Toast.LENGTH_LONG).show();
             }
         };
     }
@@ -212,10 +129,6 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
                         adapter = new VolumeAdapter(MainActivity.this, volume);
                         recyclerMain.setAdapter(adapter);
                         findViewById(R.id.idLoading).setVisibility(View.GONE);
-
-                        //adapter.updateVolumeItems(volume);
-
-                        //adapter.notifyDataSetChanged();
                     }
 
                     @Override
@@ -275,7 +188,6 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         Intent intent = new Intent(this, VolumeListActivity.class);
         intent.putExtra(SEARCH_MESSAGE, query);
         startActivity(intent);
-        //finish();
 
         return true;
     }

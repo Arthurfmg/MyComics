@@ -75,8 +75,6 @@ public class VolumeListActivity extends AppCompatActivity{
                 VolumeAdapter adapter = new VolumeAdapter(VolumeListActivity.this, volume);
                 recyclerVolume.setAdapter(adapter);
 
-                //adapter.notifyDataSetChanged();
-
                 findViewById(R.id.idLoadingVolume).setVisibility(View.GONE);
             }
 

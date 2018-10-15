@@ -62,8 +62,6 @@ public class IssuesListActivity extends AppCompatActivity {
                 final IssueAdapter adapter = new IssueAdapter(edicao, IssuesListActivity.this, volumeID);
                 recyclerEdicao.setAdapter(adapter);
 
-                //adapter.notifyDataSetChanged();
-
                 findViewById(R.id.idLoadingIssue).setVisibility(View.GONE);
             }
 

@@ -1,6 +1,7 @@
 package com.arthurfmg.mycomics.ui.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
@@ -15,7 +16,9 @@ import android.widget.Toast;
 import com.arthurfmg.mycomics.R;
 import com.arthurfmg.mycomics.common.Base64Custom;
 import com.arthurfmg.mycomics.common.ConfigFirebase;
+import com.arthurfmg.mycomics.common.FullscreenActivity;
 import com.arthurfmg.mycomics.rest.model.ComicVineIssueModel;
+import com.github.chrisbanes.photoview.PhotoView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -36,7 +39,6 @@ public class IssueAdapter extends RecyclerView.Adapter<IssueAdapter.MyViewHolder
     private DatabaseReference firebase;
     private ChildEventListener childListenerEdicao;
     private ComicVineIssueModel issueModel = new ComicVineIssueModel();
-    private ArrayList<ComicVineIssueModel> listIssue = new ArrayList();
     private String volume;
     String textoFormatado;
     Map<String, String> map;
@@ -75,6 +77,15 @@ public class IssueAdapter extends RecyclerView.Adapter<IssueAdapter.MyViewHolder
                 //.placeholder(R.drawable.default_hero)
                 .error(R.drawable.default_hero)
                 .into(holder.capa);
+
+        holder.capa.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, FullscreenActivity.class);
+                intent.putExtra("url", issue.get(position).getImage().getMedium_url());
+                context.startActivity(intent);
+            }
+        });
 
         //verifica se o ano de lançamento é nulo, se for ele mostra o ano que está na capa da revista
         if(issueModel.getStore_date() != null){
@@ -168,7 +179,8 @@ public class IssueAdapter extends RecyclerView.Adapter<IssueAdapter.MyViewHolder
         private TextView ano;
         private TextView titulo;
         private TextView edicao;
-        private ImageView capa;
+        //private ImageView capa;
+        private PhotoView capa;
         private ImageView check;
         private TextView informacoes;
         private ImageView seta;
@@ -199,7 +211,6 @@ public class IssueAdapter extends RecyclerView.Adapter<IssueAdapter.MyViewHolder
         childListenerEdicao = new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                //listIssue.clear();
                 if(map != null) {
                     map.clear();
                 }
@@ -213,7 +224,6 @@ public class IssueAdapter extends RecyclerView.Adapter<IssueAdapter.MyViewHolder
                         }
                     }
                 }
-                //IssueAdapter.this.notifyDataSetChanged();
             }
 
             @Override

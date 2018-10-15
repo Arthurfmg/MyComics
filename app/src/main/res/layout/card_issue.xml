@@ -14,7 +14,7 @@
         android:layout_height="match_parent">
 
 
-        <ImageView
+        <com.github.chrisbanes.photoview.PhotoView
             android:id="@+id/idImagemEdicao"
             android:layout_width="110dp"
             android:layout_height="160dp"
