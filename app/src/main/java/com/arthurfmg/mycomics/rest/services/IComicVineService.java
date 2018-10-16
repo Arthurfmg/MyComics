@@ -40,7 +40,7 @@ public interface IComicVineService {
     @GET("issues")
     @Headers({"User-Agent: Arthurfmg"})
     Call<ComicVineResult<ArrayList<ComicVineIssueModel>>> getIssueByVolume(@Query("api_key") String apiKey, @Query("format") String format,
-                                                                                      @Query("filter") String filter);
+                                                                                      @Query("filter") String filter, @Query("offset") String offset);
 
 
     @GET("issue/{id}")

@@ -46,10 +46,10 @@ public class ComicVineService {
         return comicVineAPI.getIssueByNameAndNumber(API_KEY, FORMAT, filter);
     }
 
-    public Call<ComicVineResult<ArrayList<ComicVineIssueModel>>> findIssueByVolume(String volume) {
+    public Call<ComicVineResult<ArrayList<ComicVineIssueModel>>> findIssueByVolume(String volume, String offset) {
         IComicVineService comicVineAPI = IComicVineService.retrofit.create(IComicVineService.class);
         String filter = VOLUME_FILTER + volume;
-        return comicVineAPI.getIssueByVolume(API_KEY, FORMAT, filter);
+        return comicVineAPI.getIssueByVolume(API_KEY, FORMAT, filter, offset);
     }
 
     public Call<ComicVineResult<ComicVineIssueModel>> findIssueById(Long id) {
