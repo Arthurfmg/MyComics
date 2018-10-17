@@ -16,7 +16,6 @@ import com.arthurfmg.mycomics.rest.model.ComicVineIssueModel;
 import com.arthurfmg.mycomics.rest.model.ComicVineResult;
 import com.arthurfmg.mycomics.rest.services.ComicVineService;
 import com.arthurfmg.mycomics.ui.adapter.IssueAdapter;
-import com.arthurfmg.mycomics.ui.adapter.VolumeAdapter;
 
 import java.util.ArrayList;
 
@@ -54,21 +53,18 @@ public class IssuesListActivity extends AppCompatActivity {
         final String volumeID = intent.getStringExtra(VolumeListActivity.VOLUME_ID);
         String volumeName = intent.getStringExtra(VolumeListActivity.VOLUME_NAME);
 
-        adapter = new IssueAdapter(edicao, IssuesListActivity.this, volumeID);
-
         toolbar.setTitle(volumeName.toUpperCase());
         toolbar.setNavigationIcon(R.drawable.arrow_back);
         setSupportActionBar(toolbar);
-
-        final int ultimaPosicao = ((LinearLayoutManager)recyclerEdicao.getLayoutManager()).findLastVisibleItemPosition();
 
         findIssue(volumeID, offset);
 
         scrollListener = new EndlessRecyclerViewScrollListener(layoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-                findIssue(volumeID, offset);
-                recyclerEdicao.getLayoutManager().scrollToPosition(ultimaPosicao + edicao.size() - 1);
+                if(atual >= 100) {
+                    findIssue(volumeID, offset);
+                }
             }
         };
 
@@ -82,15 +78,19 @@ public class IssuesListActivity extends AppCompatActivity {
                                    final Response<ComicVineResult<ArrayList<ComicVineIssueModel>>> response) {
                 Log.d("IComicVineService", "Successfully response fetched");
                 edicao.addAll(response.body().getResults());
-                recyclerEdicao.setAdapter(adapter);
+
+                if(adapter == null){
+                    adapter = new IssueAdapter(edicao, IssuesListActivity.this, volumeID);
+                    recyclerEdicao.setAdapter(adapter);
+                }else {
+                    adapter.notifyDataSetChanged();
+                }
 
                 Long nResultados = response.body().getNumber_of_page_results();
 
                 if(nResultados == 100){
                     atual += nResultados;
-                    Log.d("atual", "Numero Atual: " + atual);
                     IssuesListActivity.this.offset = String.valueOf(atual);
-                    scrollListener.resetState();
                 }
 
                 findViewById(R.id.idLoadingIssue).setVisibility(View.GONE);

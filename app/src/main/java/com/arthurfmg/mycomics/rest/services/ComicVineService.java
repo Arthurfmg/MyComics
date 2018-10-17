@@ -29,9 +29,9 @@ public class ComicVineService {
     private static final String FILTER_DELIMITER = ",";
 
 
-    public Call<ComicVineResult<ArrayList<VolumeModel>>> findVolumeByName(String name) {
+    public Call<ComicVineResult<ArrayList<VolumeModel>>> findVolumeByName(String name, String offset) {
         IComicVineService comicVineAPI = IComicVineService.retrofit.create(IComicVineService.class);
-        return comicVineAPI.getVolumeByName(API_KEY, FORMAT, NAME_FILTER + name,getFieldList(VolumeModel.class), SORT);
+        return comicVineAPI.getVolumeByName(API_KEY, FORMAT, NAME_FILTER + name,getFieldList(VolumeModel.class), SORT, offset);
     }
 
     public Call<ComicVineResult<ArrayList<VolumeModel>>> findVolumeById(Long id) {

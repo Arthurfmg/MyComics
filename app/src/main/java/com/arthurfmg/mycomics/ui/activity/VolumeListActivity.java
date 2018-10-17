@@ -1,6 +1,5 @@
 package com.arthurfmg.mycomics.ui.activity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -12,6 +11,7 @@ import android.view.View;
 
 import com.arthurfmg.mycomics.MainActivity;
 import com.arthurfmg.mycomics.R;
+import com.arthurfmg.mycomics.common.EndlessRecyclerViewScrollListener;
 import com.arthurfmg.mycomics.common.ExceptionHandler;
 import com.arthurfmg.mycomics.rest.model.ComicVineResult;
 import com.arthurfmg.mycomics.rest.model.VolumeModel;
@@ -20,8 +20,6 @@ import com.arthurfmg.mycomics.services.VolumeService;
 import com.arthurfmg.mycomics.ui.adapter.VolumeAdapter;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -40,7 +38,12 @@ public class VolumeListActivity extends AppCompatActivity{
     public final static String VOLUME_NAME = "com.arthurfmg.mycomics.VOLUME_NAME";
     VolumeModel bestMatch = null;
     private RecyclerView recyclerVolume;
+    LinearLayoutManager layoutManager;
     private Toolbar toolbar;
+    private String offset = "0";
+    private int atual = 0;
+    VolumeAdapter adapter;
+    private EndlessRecyclerViewScrollListener scrollListener;
 
 
     @Override
@@ -53,7 +56,7 @@ public class VolumeListActivity extends AppCompatActivity{
         toolbar = findViewById(R.id.toolbar_volume);
 
         //define layout
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+        layoutManager = new LinearLayoutManager(this);
         recyclerVolume.setLayoutManager(layoutManager);
 
         Intent intent = getIntent();
@@ -64,16 +67,42 @@ public class VolumeListActivity extends AppCompatActivity{
         setSupportActionBar(toolbar);
 
         final String textoDefinitivo = volumeSearchText.replaceAll(" ", "-");
-        new ComicVineService().findVolumeByName(volumeSearchText).enqueue(new Callback<ComicVineResult<ArrayList<VolumeModel>>>() {
+
+        findVolume(textoDefinitivo, offset);
+
+        scrollListener = new EndlessRecyclerViewScrollListener(layoutManager) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                findVolume(textoDefinitivo, offset);
+            }
+        };
+
+        recyclerVolume.addOnScrollListener(scrollListener);
+
+    }
+
+    public void findVolume(final String volumeName, String offset){
+        new ComicVineService().findVolumeByName(volumeName, offset).enqueue(new Callback<ComicVineResult<ArrayList<VolumeModel>>>() {
             @Override
             public void onResponse(Call<ComicVineResult<ArrayList<VolumeModel>>> call,
                                    final Response<ComicVineResult<ArrayList<VolumeModel>>> response) {
                 Log.d("IComicVineService", "Successfully response fetched");
                 volume = response.body().getResults();
-                volume = new VolumeService().sortBestMatch(textoDefinitivo, volume);
+                volume = new VolumeService().sortBestMatch(volumeName, volume);
 
-                VolumeAdapter adapter = new VolumeAdapter(VolumeListActivity.this, volume);
-                recyclerVolume.setAdapter(adapter);
+                if(adapter == null) {
+                    adapter = new VolumeAdapter(VolumeListActivity.this, volume);
+                    recyclerVolume.setAdapter(adapter);
+                } else {
+                    adapter.notifyDataSetChanged();
+                }
+
+                Long nResultados = response.body().getNumber_of_page_results();
+
+                if(nResultados == 100){
+                    atual += nResultados;
+                    VolumeListActivity.this.offset = String.valueOf(atual);
+                }
 
                 findViewById(R.id.idLoadingVolume).setVisibility(View.GONE);
             }
