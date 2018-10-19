@@ -57,6 +57,12 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
     private ValueEventListener eventListenerVolume;
 
     @Override
+    protected void onStop() {
+        super.onStop();
+        firebase.removeEventListener(eventListenerVolume);
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler(this));
